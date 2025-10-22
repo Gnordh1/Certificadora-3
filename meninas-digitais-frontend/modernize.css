@@ -64,6 +64,7 @@ button, .btn {
   border-radius: 10px;
   border: none;
   cursor: pointer;
+  text-decoration: none;
   transition: transform var(--smooth), box-shadow var(--smooth), opacity var(--smooth);
   font-weight: 600;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));

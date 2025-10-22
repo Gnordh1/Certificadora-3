@@ -8,11 +8,11 @@
   --muted: hsl(270 20% 96%);
   --muted-foreground: hsl(270 10% 50%);
 
-  --primary: hsl(270 80% 65%);
+  --primary: linear-gradient(135deg, hsl(270 80% 65%), hsl(330 80% 60%));
   --primary-foreground: hsl(0 0% 100%);
 
-  --secondary: hsl(330 80% 60%);
-  --accent: hsl(215 90% 60%);
+  --secondary: linear-gradient(135deg, hsl(215 90% 60%), hsl(270 80% 65%));
+  --accent: linear-gradient(135deg, hsl(30 90% 60%), hsl(330 80% 60%));
 
   --border: hsl(270 20% 90%);
   --input: hsl(270 20% 90%);
@@ -67,6 +67,7 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
+  text-decoration: none;
 }
 .brand-text{
   font-weight: 700;
@@ -101,6 +102,7 @@ body {
   align-items: center;
   gap: 10px;
   font-size: 1rem;
+  text-decoration: none;
 }
 
 .btn:focus{ outline: 3px solid hsl(270 80% 65% / 0.18); outline-offset: 2px; }
@@ -130,61 +132,7 @@ body {
   box-shadow: 0 4px 12px -2px hsl(215 90% 60% / 0.3);
 }
 
-/* Hero */
-.hero {
-  position: relative;
-  overflow: hidden;
-  padding: 64px 0 48px;
-}
-.hero-bg {
-  position:absolute;
-  inset:0;
-  background: var(--gradient-hero);
-  opacity: 0.08;
-  pointer-events: none;
-}
-.hero-inner {
-  position: relative;
-  text-align: center;
-  max-width: 840px;
-  margin: 0 auto;
-  padding: 32px 0;
-}
-.hero-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 14px;
-  border-radius:999px;
-  border: 1px solid rgba(127, 90, 255, 0.18);
-  background: rgba(127, 90, 255, 0.04);
-  margin-bottom: 18px;
-  font-size: 0.94rem;
-  font-weight: 600;
-  color: var(--primary);
-}
-.hero-title{
-  font-size: 2.75rem;
-  line-height: 1.02;
-  margin: 6px 0 12px;
-  font-weight: 800;
-}
-@media (min-width: 768px){
-  .hero-title{ font-size: 3.6rem; }
-  .nav-inner{ height:72px; }
-}
-.text-gradient{
-  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.hero-sub{
-  color: var(--muted-foreground);
-  max-width: 720px;
-  margin: 0 auto 18px;
-  font-size: 1.125rem;
-}
+
 
 /* Hero CTAs */
 .hero-ctas{
@@ -194,36 +142,6 @@ body {
   flex-wrap:wrap;
   padding-top: 12px;
 }
-
-/* Stats section */
-.stats{
-  padding: 28px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: rgba(232,229,255,0.14);
-}
-.stats-grid{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 12px;
-}
-@media (min-width: 768px){
-  .stats-grid{ grid-template-columns: repeat(3,1fr); }
-}
-.stat{ text-align:center; }
-.stat-icon{
-  width:48px; height:48px; border-radius:10px; margin:0 auto 12px; display:flex; align-items:center; justify-content:center;
-  box-shadow: var(--shadow-lg);
-}
-.circle-center{ display:flex; align-items:center; justify-content:center; }
-.gradient-primary{ background: var(--gradient-primary); color: white; }
-.gradient-secondary{ background: var(--gradient-secondary); color: white; }
-.gradient-accent{ background: linear-gradient(135deg,var(--accent), var(--primary)); color: white; }
-.stat-number{ font-size:1.6rem; font-weight:800; margin-bottom:6px; }
-.stat-label{ color: var(--muted-foreground); font-size:0.92rem; }
 
 /* Events section */
 .events-section{ padding: 48px 0; }
@@ -355,3 +273,60 @@ body {
 
 /* subtle hover states */
 .event-card:hover{ transform: translateY(-4px); transition: transform 180ms ease; box-shadow: var(--shadow-colored); }
+
+
+/* hero */
+.hero {
+  position: relative;
+  padding: 80px 0;
+  text-align: center;
+}
+.hero-bg {
+  background: linear-gradient(135deg, hsl(270 90% 70%), hsl(330 85% 65%), hsl(215 90% 65%));
+  opacity: 0.1;
+  position: absolute;
+  inset: 0;
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+.hero-badge {
+  display: inline-block;
+  border: 1px solid hsl(270 80% 65% / 0.2);
+  background: hsl(270 80% 65% / 0.08);
+  color: hsl(270 80% 65%);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+.text-gradient {
+  background: var(--primary);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.hero-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.btn-outline {
+  background: transparent;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-weight: 600;
+  cursor: pointer;
+}

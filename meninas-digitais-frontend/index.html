@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Meninas Digitais - UTFPR-CP</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="root-bg">
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-mark" aria-hidden="true">
+            <img src="imagens/logo1.png" alt="Logo Meninas Digitais" width="100" height="130">
+        </div>
+        <div class="brand-text">Meninas Digitais</div>
+      </a>
+
+      <nav class="nav-actions">
+        <a href="login-cadastro.html" id="loginBtnNav" class="btn btn-primary">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+    <div class="hero-bg"></div>
+      <div class="container hero-content">
+        <div class="hero-badge">✨ Empoderamento através da tecnologia</div>
+        <h1>Bem-vinda ao <span class="text-gradient">Meninas Digitais</span></h1>
+        <p>Descubra o mundo da tecnologia através de minicursos, oficinas e palestras criadas especialmente para você.</p>
+        <div class="hero-actions">
+          <button id="verEventosBtnHero" class="btn btn-primary">Ver Eventos</button>
+          <button id="sobreBtnHero" class="btn btn-outline">Saiba Mais</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="events" class="events-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Próximos Eventos</h2>
+          <p>Explore nossa agenda de eventos e garanta sua vaga! <span id="eventsCount">0+</span> eventos incríveis esperando por você!</p>
+        </div>
+
+        <div id="eventsGrid" class="events-grid">
+        </div>
+
+        <div id="noEvents" class="no-events-message" hidden>
+          Nenhum evento publicado no momento. Fique ligada para futuras atualizações!
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 Meninas Digitais - UTFPR-CP. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
