@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Meu Perfil - Meninas Digitais</title>
+  <link rel="stylesheet" href="modernize.css">  <!-- Carregue modernize.css primeiro -->
+  <link rel="stylesheet" href="estilos.css" /> <!-- Depois estilos.css para sobrescrever conforme necessário -->
+  <style>
+      /* Estilos globais e de layout para perfil-aluna */
+      body.root-bg {
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+      }
+      main {
+          flex-grow: 1;
+          padding: 40px 0;
+      }
+      .profile-container {
+          max-width: 800px;
+          margin: 0 auto;
+          background: var(--card);
+          border-radius: var(--radius);
+          box-shadow: var(--shadow-lg);
+          padding: 30px;
+          border: 1px solid var(--border);
+      }
+      .profile-header {
+          text-align: center;
+          margin-bottom: 30px;
+      }
+      .profile-header h1 {
+          color: var(--foreground);
+          font-size: 2.2rem;
+          margin-bottom: 10px;
+          font-weight: 800;
+      }
+      .profile-avatar {
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin: 0 auto 15px;
+          border: 4px solid var(--primary);
+          padding: 3px;
+          background: white;
+          display: block;
+      }
+      .profile-form {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 20px;
+      }
+      @media (min-width: 600px) {
+          .profile-form {
+              grid-template-columns: 1fr 1fr;
+          }
+          .profile-form .full-width {
+              grid-column: span 2;
+          }
+      }
+      .form-group {
+          text-align: left;
+      }
+      .form-group label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 600;
+          color: var(--foreground);
+      }
+      .form-group input[type="text"],
+      .form-group input[type="email"],
+      .form-group input[type="password"],
+      .form-group textarea,
+      .form-group input[type="date"] { /* Adicionado para tipo date */
+          width: calc(100% - 24px);
+          padding: 12px;
+          border: 1px solid var(--input);
+          border-radius: 8px;
+          font-size: 1rem;
+          background: var(--muted);
+          color: var(--foreground);
+          box-sizing: border-box;
+      }
+      .form-group textarea {
+          resize: vertical;
+          min-height: 80px;
+      }
+      .form-actions {
+          grid-column: span 1;
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+          margin-top: 20px;
+      }
+      @media (min-width: 600px) {
+          .form-actions {
+              grid-column: span 2;
+              justify-content: flex-end;
+          }
+      }
+      .form-actions .btn {
+          padding: 12px 25px;
+      }
+      
+  </style>
+
+    
+</head>
+<body class="root-bg">
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-mark" aria-hidden="true">
+            <img src="imagens/logo1.png" alt="Logo Meninas Digitais" width="100" height="130">
+        </div>
+        <div class="brand-text">Meninas Digitais</div>
+      </a>
+
+      <nav class="nav-actions">
+        <a href="index.html#events" class="nav-link">Eventos</a>
+        <a href="#" class="nav-link">Meus Cursos</a>
+        <a href="perfil-aluna.html" class="nav-link active">Meu Perfil</a>
+        <button class="btn btn-outline">Sair</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container profile-container">
+        <div class="profile-header">
+            <img src="https://via.placeholder.com/120/7F5AFF/FFFFFF?text=MD" alt="Avatar da Aluna" class="profile-avatar">
+            <h1>Olá, Maria!</h1>
+            <p class="muted-foreground">Gerencie suas informações de perfil.</p>
+        </div>
+
+        <form class="profile-form">
+            <div class="form-group">
+                <label for="nome">Nome Completo</label>
+                <input type="text" id="nome" value="Maria Silva Santos" required>
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" value="maria.silva@email.com" required>
+            </div>
+            <div class="form-group">
+                <label for="telefone">Telefone</label>
+                <input type="text" id="telefone" value="(11) 98765-4321">
+            </div>
+            <div class="form-group">
+                <label for="nascimento">Data de Nascimento</label>
+                <input type="date" id="nascimento" value="2000-01-15">
+            </div>
+            <div class="form-group full-width">
+                <label for="bio">Biografia</label>
+                <textarea id="bio" placeholder="Fale um pouco sobre você...">Entusiasta da tecnologia e apaixonada por programação. Buscando aprender e crescer na área.</textarea>
+            </div>
+            <div class="form-group">
+                <label for="senha-atual">Senha Atual</label>
+                <input type="password" id="senha-atual" placeholder="********">
+            </div>
+            <div class="form-group">
+                <label for="nova-senha">Nova Senha</label>
+                <input type="password" id="nova-senha" placeholder="********">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-outline">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            </div>
+        </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 Meninas Digitais - UTFPR-CP. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>
