@@ -8,7 +8,7 @@ const events = [
     location: "Laboratório 3 - UTFPR",
     status: "published",
     type: "Oficina",
-    vacancies: "30 vagas" 
+    vacancies: "30 vagas"
   },
   {
     id: "e2",
@@ -17,7 +17,7 @@ const events = [
     date: "2025-11-20",
     time: "09:00",
     location: "Auditório Central",
-    status: "draft",
+    status: "draft", // Este evento não será renderizado, pois o status é 'draft'
     type: "Minicurso",
     vacancies: "20 vagas"
   },
@@ -41,31 +41,50 @@ const events = [
     location: "Laboratório de Robótica",
     status: "published",
     type: "Oficina",
-    vacancies: "25 vagas" 
+    vacancies: "25 vagas"
   }
 ];
 
-// Query elements
+// Query elements - atualizados para IDs únicos se houver mais de um botão com a mesma função
 const eventsGrid = document.getElementById('eventsGrid');
 const noEvents = document.getElementById('noEvents');
 const eventsCountEl = document.getElementById('eventsCount');
-const verEventosBtn = document.getElementById('verEventosBtn');
-const sobreBtn = document.getElementById('sobreBtn');
-const loginBtn = document.getElementById('loginBtn');
+
+// Botões do Navbar
+const verEventosBtnNav = document.getElementById('verEventosBtnNav');
+const sobreBtnNav = document.getElementById('sobreBtnNav');
+const loginBtnNav = document.getElementById('loginBtnNav');
+
+// Botões da Hero Section
+const verEventosBtnHero = document.getElementById('verEventosBtnHero');
+const sobreBtnHero = document.getElementById('sobreBtnHero');
+
 
 // Scroll handlers
-verEventosBtn?.addEventListener('click', (e) => {
+verEventosBtnNav?.addEventListener('click', (e) => {
   e.preventDefault();
   document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
 });
-sobreBtn?.addEventListener('click', (e) => {
+verEventosBtnHero?.addEventListener('click', (e) => {
   e.preventDefault();
-  // If you had an about section, scroll or open a modal. For now, show an alert.
+  document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
+});
+
+sobreBtnNav?.addEventListener('click', (e) => {
+  e.preventDefault();
   window.alert("Sobre o projeto: Meninas Digitais - UTFPR-CP. Ferramenta para gestão de oficinas e minicursos.");
 });
-loginBtn?.addEventListener('click', () => {
-  window.alert("Tela de login (a implementar).");
+sobreBtnHero?.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.alert("Sobre o projeto: Meninas Digitais - UTFPR-CP. Ferramenta para gestão de oficinas e minicursos.");
 });
+
+loginBtnNav?.addEventListener('click', (e) => {
+    // A navegação já é feita pelo href="login-cadastro.html", mas o listener pode ser útil para outras ações
+    // e.preventDefault(); // Comente se quiser que o link padrão funcione
+    // window.alert("Redirecionando para a tela de login/cadastro.");
+});
+
 
 // render function
 function formatDate(dateStr){
@@ -90,7 +109,7 @@ function createEventCard(event){
   const vacanciesBadge = document.createElement('span');
   vacanciesBadge.className = 'badge badge-vacancies';
   vacanciesBadge.textContent = event.vacancies;
-  
+
   cover.appendChild(typeBadge);
   cover.appendChild(vacanciesBadge);
 
@@ -116,20 +135,21 @@ function createEventCard(event){
   const actions = document.createElement('div');
   actions.className = 'card-actions';
 
-  const btnUnified = document.createElement('button');
-  btnUnified.className = 'btn btn-join';
-  btnUnified.type = 'button';
+  const btnUnified = document.createElement('a'); // Mudado para 'a' para navegação
+  btnUnified.className = 'btn btn-join btn-primary'; // Adicionado btn-primary
+  btnUnified.href = `detalhes-evento.html?id=${event.id}`; // Linka para a página de detalhes
   btnUnified.textContent = 'Ver Detalhes e Inscrever-se';
-  
-  btnUnified.addEventListener('click', () => {
-    window.alert(`${event.title} (${event.type})\n\n${event.description}\n\nData: ${formatDate(event.date)} às ${event.time}\nLocal: ${event.location}\nVagas: ${event.vacancies}\n\n(Simulando a navegação para a página de detalhes/inscrição)`);
-  });
-  
+
+  // Removido o alert para permitir navegação real
+  // btnUnified.addEventListener('click', () => {
+  //   window.alert(`${event.title} (${event.type})\n\n${event.description}\n\nData: ${formatDate(event.date)} às ${event.time}\nLocal: ${event.location}\nVagas: ${event.vacancies}\n\n(Simulando a navegação para a página de detalhes/inscrição)`);
+  // });
+
   actions.appendChild(btnUnified);
 
   content.appendChild(title);
-  content.appendChild(dateTime); 
-  content.appendChild(locationEl); 
+  content.appendChild(dateTime);
+  content.appendChild(locationEl);
   content.appendChild(desc);
   content.appendChild(actions);
 
