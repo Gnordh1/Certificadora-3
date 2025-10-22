@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Detalhes do Evento - Workshop de Python Básico</title>
+  <link rel="stylesheet" href="modernize.css">  <!-- Carregue modernize.css primeiro -->
+  <link rel="stylesheet" href="estilos.css" /> <!-- Depois estilos.css para sobrescrever conforme necessário -->
+  <style>
+      body.root-bg {
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+      }
+      main {
+          flex-grow: 1;
+          padding: 40px 0;
+      }
+      .event-detail-container {
+          max-width: 900px;
+          margin: 0 auto;
+          background: var(--card);
+          border-radius: var(--radius);
+          box-shadow: var(--shadow-lg);
+          padding: 30px;
+          border: 1px solid var(--border);
+      }
+      .event-cover-image {
+          width: 100%;
+          height: 250px;
+          object-fit: cover;
+          border-radius: var(--radius);
+          margin-bottom: 25px;
+          background: var(--muted); /* Fallback */
+          display: block;
+      }
+      .event-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 20px;
+          flex-wrap: wrap;
+          gap: 15px;
+      }
+      .event-header h1 {
+          flex: 1;
+          margin: 0;
+          font-size: 2.5rem;
+          font-weight: 800;
+          color: var(--foreground);
+      }
+      .event-badges {
+          display: flex;
+          gap: 10px;
+      }
+      .event-info {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 20px;
+          margin-bottom: 30px;
+      }
+      @media (min-width: 768px) {
+          .event-info {
+              grid-template-columns: 2fr 1fr;
+          }
+      }
+      .event-description {
+          color: var(--muted-foreground);
+          line-height: 1.6;
+          font-size: 1.05rem;
+      }
+      .event-sidebar {
+          background: var(--muted);
+          border-radius: var(--radius);
+          padding: 20px;
+          border: 1px solid var(--border);
+      }
+      .event-sidebar h3 {
+          margin-top: 0;
+          color: var(--foreground);
+          font-size: 1.3rem;
+          margin-bottom: 15px;
+      }
+      .event-sidebar-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 12px;
+          color: var(--foreground);
+          font-weight: 500;
+          font-size: 0.95rem;
+      }
+      .event-sidebar-item svg {
+          color: var(--primary);
+          flex-shrink: 0;
+      }
+      .event-sidebar .btn {
+          width: 100%;
+          margin-top: 15px;
+          padding: 14px;
+      }
+      .form-section h3 {
+          color: var(--foreground);
+          margin-bottom: 15px;
+          font-size: 1.5rem;
+      }
+      .form-section .form-group {
+          margin-bottom: 15px;
+      }
+      .form-section .form-group label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 600;
+          color: var(--foreground);
+      }
+      .form-section .form-group input,
+      .form-section .form-group select,
+      .form-section .form-group textarea {
+          width: calc(100% - 24px);
+          padding: 12px;
+          border: 1px solid var(--input);
+          border-radius: 8px;
+          font-size: 1rem;
+          background: var(--card);
+          color: var(--foreground);
+          box-sizing: border-box;
+      }
+      .form-section .form-group textarea {
+          resize: vertical;
+          min-height: 80px;
+      }
+      .form-section .btn {
+          margin-top: 20px;
+          width: auto;
+      }
+      .alert-message {
+          background: hsl(215 90% 60% / 0.1);
+          color: hsl(215 90% 40%);
+          border: 1px solid hsl(215 90% 60% / 0.3);
+          border-radius: var(--radius);
+          padding: 15px;
+          margin-top: 20px;
+          font-size: 0.95rem;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+      }
+      .alert-message svg {
+          flex-shrink: 0;
+      }
+  </style>
+
+    
+</head>
+<body class="root-bg">
+  <header class="navbar">
+    <div class="container nav-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+            <img src="imagens/logo1.png" alt="Logo" width="100" height="130">
+        </div>
+        <div class="brand-text">Meninas Digitais</div>
+      </div>
+      <nav class="nav-actions">
+        <a href="#" class="nav-link active">Eventos</a>
+        <a href="#" class="nav-link">Meus Cursos</a>
+        <a href="#" class="nav-link">Meu Perfil</a>
+        <button class="btn btn-outline">Sair</button>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div class="container event-detail-container">
+        <img src="https://via.placeholder.com/900x250/7F5AFF/FFFFFF?text=Imagem+do+Evento" alt="Capa do Evento" class="event-cover-image">
+
+        <div class="event-header">
+            <h1>Workshop de Python Básico para Iniciantes</h1>
+            <div class="event-badges">
+                <span class="badge badge-type">Workshop</span>
+                <span class="badge badge-vacancies">15 vagas</span>
+            </div>
+        </div>
+
+        <div class="event-info">
+            <div class="event-main-content">
+                <p class="event-description">
+                    Este workshop é perfeito para quem quer dar os primeiros passos no mundo da programação com Python! Abordaremos os conceitos fundamentais da linguagem, estruturas de dados básicas, lógica de programação e como escrever seu primeiro código funcional. Não é necessário nenhum conhecimento prévio em programação.
+                </p>
+                <p class="event-description">
+                    Ao final do workshop, você terá uma base sólida para continuar seus estudos em Python e estará apta a criar pequenos scripts e resolver problemas simples de codificação. Prepare-se para aprender de forma prática e divertida!
+                </p>
+                <div class="form-section">
+                    <h3>Inscreva-se neste evento</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="nome-completo">Nome Completo</label>
+                            <input type="text" id="nome-completo" value="Maria Silva Santos" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email-inscricao">E-mail</label>
+                            <input type="email" id="email-inscricao" value="maria.silva@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="motivacao">Por que você quer participar?</label>
+                            <textarea id="motivacao" rows="4" placeholder="Conte-nos sua motivação..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-join">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 2 2 4-4"/></svg>
+                            Confirmar Inscrição
+                        </button>
+                        <div class="alert-message" style="display:none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                            <span>Inscrição realizada com sucesso! Você receberá a confirmação por e-mail.</span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <aside class="event-sidebar">
+                <h3>Detalhes Rápidos</h3>
+                
+                <div class="event-sidebar-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                    <span>**Data:** 15 de Novembro de 2025</span>
+                </div>
+                
+                <div class="event-sidebar-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span>**Horário:** 14:00 - 17:00 (GMT-3)</span>
+                </div>
+                
+                <div class="event-sidebar-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <span>**Local:** Bloco K - Sala 101, UTFPR-CP</span>
+                </div>
+                
+                <div class="event-sidebar-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span>**Palestrante:** Prof. Joana D'arc</span>
+                </div>
+
+                <button class="btn btn-outline">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share-2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+                    Compartilhar Evento
+                </button>
+            </aside>
+        </div>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 Meninas Digitais - UTFPR-CP. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>
