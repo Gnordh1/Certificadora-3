@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login e Cadastro - Meninas Digitais</title>
+  <link rel="stylesheet" href="modernize.css">  <!-- Carregue modernize.css primeiro -->
+  <link rel="stylesheet" href="estilos.css" /> <!-- Depois estilos.css para sobrescrever conforme necessário -->
+  <style>
+      /* Estilos globais e de layout para login-cadastro */
+      body.root-bg {
+          display: flex;
+          flex-direction: column; /* Para permitir que o navbar e footer fiquem no topo/base */
+          min-height: 100vh;
+      }
+      main {
+          flex-grow: 1; /* Permite que o conteúdo principal ocupe o espaço restante */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 20px 0; /* Adiciona um padding para o container de auth */
+      }
+      .auth-container {
+          background: var(--card);
+          border-radius: var(--radius);
+          box-shadow: var(--shadow-lg);
+          padding: 30px;
+          width: 100%;
+          max-width: 400px;
+          text-align: center;
+          border: 1px solid var(--border);
+      }
+      .auth-tabs {
+          display: flex;
+          margin-bottom: 20px;
+          border-bottom: 1px solid var(--border);
+      }
+      .auth-tab {
+          flex: 1;
+          padding: 12px 0;
+          cursor: pointer;
+          font-weight: 600;
+          color: var(--muted-foreground);
+          border-bottom: 3px solid transparent;
+          transition: all 0.2s ease;
+      }
+      .auth-tab.active {
+          color: var(--primary);
+          border-color: var(--primary);
+      }
+      .auth-tab:hover:not(.active) {
+          color: var(--foreground);
+      }
+      .auth-form {
+          display: none;
+          flex-direction: column;
+          gap: 15px;
+      }
+      .auth-form.active {
+          display: flex;
+      }
+      .auth-form input[type="text"],
+      .auth-form input[type="email"],
+      .auth-form input[type="password"] {
+          width: calc(100% - 24px);
+          padding: 12px;
+          border: 1px solid var(--input);
+          border-radius: 8px;
+          font-size: 1rem;
+          background: var(--muted);
+          color: var(--foreground);
+      }
+      .auth-form input::placeholder {
+          color: var(--muted-foreground);
+      }
+      .auth-form .btn {
+          width: 100%;
+          padding: 12px;
+          margin-top: 10px;
+      }
+      .auth-container h2 {
+          margin-top: 0;
+          color: var(--foreground);
+          font-size: 1.8rem;
+          margin-bottom: 20px;
+      }
+      .forgot-password {
+          font-size: 0.9rem;
+          color: var(--muted-foreground);
+          text-decoration: none;
+          margin-top: 10px;
+          display: block;
+      }
+      .forgot-password:hover {
+          color: var(--primary);
+      }
+  </style>
+
+   
+</head>
+<body class="root-bg">
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-mark" aria-hidden="true">
+            <img src="imagens/logo1.png" alt="Logo Meninas Digitais" width="100" height="130">
+        </div>
+        <div class="brand-text">Meninas Digitais</div>
+      </a>
+
+      <nav class="nav-actions">
+        <!-- Botão de login pode ser removido aqui, já que esta é a página de login/cadastro -->
+        <!-- Ou pode ser um botão para "Voltar para Home" -->
+        <a href="index.html" class="btn btn-outline">Voltar para Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="auth-container">
+        <h2>Plataforma Meninas Digitais</h2>
+        <div class="auth-tabs">
+            <div class="auth-tab active" data-tab="login">Login</div>
+            <div class="auth-tab" data-tab="cadastro">Cadastro</div>
+        </div>
+
+        <form class="auth-form active" id="login-form">
+            <input type="email" placeholder="E-mail" required>
+            <input type="password" placeholder="Senha" required>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+            <a href="#" class="forgot-password">Esqueceu a senha?</a>
+        </form>
+
+        <form class="auth-form" id="cadastro-form">
+            <input type="text" placeholder="Nome Completo" required>
+            <input type="email" placeholder="E-mail" required>
+            <input type="password" placeholder="Senha" required>
+            <input type="password" placeholder="Confirmar Senha" required>
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 Meninas Digitais - UTFPR-CP. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          const tabs = document.querySelectorAll('.auth-tab');
+          const forms = document.querySelectorAll('.auth-form');
+
+          tabs.forEach(tab => {
+              tab.addEventListener('click', () => {
+                  tabs.forEach(t => t.classList.remove('active'));
+                  tab.classList.add('active');
+
+                  forms.forEach(form => form.classList.remove('active'));
+                  document.getElementById(`${tab.dataset.tab}-form`).classList.add('active');
+              });
+          });
+      });
+  </script>
+</body>
+</html>
