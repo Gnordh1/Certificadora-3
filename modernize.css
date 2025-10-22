@@ -1,0 +1,163 @@
+
+/* modernize.css - melhorias visuais, tipografia, espaçamento e responsividade
+   Mantém as cores existentes (não sobrescreve variáveis de cores), aplica melhorias gerais.
+*/
+
+:root{
+  --base-font: "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --radius: 10px;
+  --glass-bg: rgba(255,255,255,0.03); /* transparente para temas escuros */
+  --glass-bg-light: rgba(255,255,255,0.06);
+  --card-shadow: 0 6px 18px rgba(2,6,23,0.45);
+  --smooth: 250ms cubic-bezier(.2,.9,.3,1);
+  --focus-ring: 0 0 0 4px rgba(59,130,246,0.12);
+}
+
+/* Tipografia base */
+html { box-sizing: border-box; font-family: var(--base-font); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+*, *:before, *:after { box-sizing: inherit; }
+
+body {
+  margin: 0;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  background-attachment: fixed;
+  transition: background var(--smooth);
+}
+
+/* Container central */
+.container {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 20px;
+}
+
+/* Cards e painéis */
+.card, .panel, .box {
+  background: var(--glass-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  padding: 18px;
+  transition: transform var(--smooth), box-shadow var(--smooth);
+  backdrop-filter: blur(6px) saturate(120%);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+}
+
+.card:hover, .panel:hover, .box:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 34px rgba(2,6,23,0.55);
+}
+
+/* Cabeçalhos */
+h1, h2, h3, h4 {
+  margin: 0 0 12px 0;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+/* Botões modernizados */
+button, .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: transform var(--smooth), box-shadow var(--smooth), opacity var(--smooth);
+  font-weight: 600;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 6px 18px rgba(2,6,23,0.35);
+}
+
+button:active, .btn:active { transform: translateY(1px); }
+button:focus, .btn:focus { outline: none; box-shadow: var(--focus-ring); }
+
+/* Estilos para inputs e formulários */
+input[type="text"], input[type="email"], input[type="password"], textarea, select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  color: inherit;
+  transition: box-shadow var(--smooth), border-color var(--smooth), transform var(--smooth);
+  font-size: 14px;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  transform: translateY(-2px);
+}
+
+/* Tabelas mais legíveis */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+table thead tr {
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  opacity: 0.9;
+}
+
+table tbody tr {
+  transition: background var(--smooth), transform var(--smooth);
+}
+
+table tbody tr:hover {
+  transform: translateX(6px);
+  background: rgba(255,255,255,0.02);
+}
+
+/* Navegação */
+.navbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 6px 16px rgba(2,6,23,0.4);
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .container { padding: 12px; margin: 16px; }
+  .navbar { flex-wrap: wrap; gap: 8px; }
+  .card { padding: 12px; }
+}
+
+/* Pequenos badges e chips */
+.badge, .chip {
+  display: inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:600;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Transições padrão */
+* { transition-duration: 220ms; transition-timing-function: cubic-bezier(.2,.9,.3,1); }
+
+/* Helpers */
+.text-muted { opacity: 0.7; font-size: 13px; }
+.flex { display:flex; }
+.center { display:flex; align-items:center; justify-content:center; }
+.space-between { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+
+/* Pequenas animações de entrada */
+@keyframes fadeInUp {
+  from { opacity:0; transform: translateY(8px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.fade-in-up { animation: fadeInUp 420ms ease both; }
