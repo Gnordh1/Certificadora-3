@@ -169,6 +169,7 @@ Siga os passos abaixo para configurar e rodar a aplicação em seu ambiente loca
 - **Node.js** (versão 14 ou superior)
 - **npm** (geralmente instalado com o Node.js)
 - **MongoDB** (instalado localmente ou uma instância em um serviço de nuvem como o MongoDB Atlas)
+	- Após instalar o MongoDB em sua máquina, certifique-se de que o serviço está ativo e rodando antes de iniciar o servidor backend com `node src/app.js`. Caso contrário, a aplicação não conseguirá se conectar ao banco de dados.
 
 ### Configuração do Backend
 
