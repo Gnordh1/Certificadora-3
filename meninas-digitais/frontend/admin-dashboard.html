@@ -1,249 +1,363 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dashboard do Administrador - Meninas Digitais</title>
-  <link rel="stylesheet" href="modernize.css">  <!-- Carregue modernize.css primeiro -->
-<link rel="stylesheet" href="styles.css" /> <!-- Depois estilos.css para sobrescrever conforme necessário -->
-  <style>
-      /* Estilos globais e de layout para admin-dashboard */
-      body.root-bg {
-          display: flex;
-          flex-direction: column;
-          min-height: 100vh;
-      }
-      .admin-layout {
-          display: flex;
-          flex: 1; /* Permite que o layout admin ocupe o espaço restante */
-      }
-      .admin-sidebar {
-          width: 250px;
-          background: var(--card);
-          border-right: 1px solid var(--border);
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-          box-shadow: 2px 0 10px -5px rgba(0,0,0,0.05);
-          position: sticky; /* Mantém a sidebar visível ao scrollar */
-          top: 68px; /* Altura do navbar padrão */
-          height: calc(100vh - 68px); /* Altura total da tela menos a altura do navbar */
-          overflow-y: auto; /* Adiciona scroll se o conteúdo for maior */
-      }
-      .admin-sidebar h3 {
-          color: var(--primary);
-          margin-top: 0;
-          margin-bottom: 20px;
-          text-align: center;
-      }
-      .admin-sidebar a {
-          text-decoration: none;
-          color: var(--foreground);
-          padding: 10px 15px;
-          border-radius: 8px;
-          transition: background 0.2s ease;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          font-weight: 600;
-      }
-      .admin-sidebar a:hover, .admin-sidebar a.active {
-          background: var(--primary);
-          color: var(--primary-foreground);
-      }
-      .admin-main-content {
-          flex: 1;
-          padding: 30px;
-          background: hsl(var(--background-h) var(--background-s) var(--background-l));
-      }
-      .admin-main-content h1 {
-          color: var(--foreground);
-          margin-bottom: 30px;
-          font-size: 2.2rem;
-          font-weight: 800;
-      }
-      .stats-grid-admin {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 20px;
-          margin-bottom: 40px;
-      }
-      .stat-card {
-          background: var(--card);
-          border-radius: var(--radius);
-          box-shadow: 0 4px 12px -2px rgba(0,0,0,0.05);
-          padding: 20px;
-          text-align: center;
-          border: 1px solid var(--border);
-      }
-      .stat-card .icon {
-          font-size: 2.5rem;
-          color: var(--primary);
-          margin-bottom: 10px;
-      }
-      .stat-card .number {
-          font-size: 2rem;
-          font-weight: 800;
-          color: var(--foreground);
-          margin-bottom: 5px;
-      }
-      .stat-card .label {
-          color: var(--muted-foreground);
-          font-size: 0.95rem;
-      }
-      .recent-activity-card, .quick-actions-card {
-          background: var(--card);
-          border-radius: var(--radius);
-          box-shadow: 0 4px 12px -2px rgba(0,0,0,0.05);
-          padding: 20px;
-          border: 1px solid var(--border);
-          margin-bottom: 20px;
-      }
-      .recent-activity-card h3, .quick-actions-card h3 {
-          color: var(--foreground);
-          margin-top: 0;
-          margin-bottom: 15px;
-          font-size: 1.4rem;
-      }
-      .activity-item {
-          display: flex;
-          justify-content: space-between;
-          padding: 10px 0;
-          border-bottom: 1px dashed var(--muted);
-          color: var(--muted-foreground);
-          font-size: 0.9rem;
-      }
-      .activity-item:last-child {
-          border-bottom: none;
-      }
-      .quick-actions-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-          gap: 15px;
-      }
-      .quick-actions-grid .btn {
-          width: 100%;
-          justify-content: center;
-      }
-  </style>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Dashboard do Administrador - Meninas Digitais</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="root-bg">
+    <header class="navbar">
+      <div class="container nav-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <img
+              src="imagens/logo1.png"
+              alt="Logo Meninas Digitais"
+              width="100"
+              height="130"
+            />
+          </div>
+          <div class="brand-text">Meninas Digitais</div>
+        </a>
+        <nav class="nav-actions">
+          <button class="btn btn-outline btn-logout">Sair</button>
+        </nav>
+      </div>
+    </header>
 
-    
-</head>
-<body class="root-bg">
-  <header class="navbar">
-    <div class="container nav-inner">
-      <a href="index.html" class="brand">
-        <div class="brand-mark" aria-hidden="true">
-            <img src="imagens/logo1.png" alt="Logo Meninas Digitais" width="100" height="130">
-        </div>
-        <div class="brand-text">Meninas Digitais</div>
-      </a>
-
-      <nav class="nav-actions">
-        <button class="btn btn-outline">Sair</button>
-      </nav>
-    </div>
-  </header>
-
-  <div class="admin-layout">
-    <aside class="admin-sidebar">
+    <div class="admin-layout">
+      <aside class="admin-sidebar">
         <h3>Admin Dashboard</h3>
-        <a href="#" class="active">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-            Dashboard
+        <a href="admin-dashboard.html" class="active">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-layout-dashboard"
+          >
+            <rect width="7" height="9" x="3" y="3" rx="1" />
+            <rect width="7" height="5" x="14" y="3" rx="1" />
+            <rect width="7" height="9" x="14" y="12" rx="1" />
+            <rect width="7" height="5" x="3" y="16" rx="1" />
+          </svg>
+          Dashboard
+        </a>
+        <a href="admin-eventos.html">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-calendar-check"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <line x1="16" x2="16" y1="2" y2="6" />
+            <line x1="8" x2="8" y1="2" y2="6" />
+            <line x1="3" x2="21" y1="10" y2="10" />
+            <path d="m9 16 2 2 4-4" />
+          </svg>
+          Eventos
         </a>
         <a href="#">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-check"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
-            Eventos
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-users"
+          >
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path
+              d="M22 21v-2a4 4 0 0 0-3-3.87C20.5 11.97 22 10.33 22 8c0-2.07-1.47-3.67-3.5-3.87C16.5 3.97 15 5.67 15 8c0 2.07 1.47 3.67 3.5 3.87"
+            />
+          </svg>
+          Alunas
         </a>
         <a href="#">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87C20.5 11.97 22 10.33 22 8c0-2.07-1.47-3.67-3.5-3.87C16.5 3.97 15 5.67 15 8c0 2.07 1.47 3.67 3.5 3.87"/></svg>
-            Alunas
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-message-square-text"
+          >
+            <path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+            />
+            <line x1="13" x2="11" y1="11" y2="11" />
+            <line x1="15" x2="9" y1="7" y2="7" />
+          </svg>
+          Feedbacks
         </a>
         <a href="#">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square-text"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="13" x2="11" y1="11" y2="11"/><line x1="15" x2="9" y1="7" y2="7"/></svg>
-            Feedbacks
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-settings"
+          >
+            <path
+              d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.78 1.35a2 2 0 0 0 .73 2.73l.15.08a2 2 0 0 1 1 1.73v.5a2 2 0 0 1-1 1.73l-.15.08a2 2 0 0 0-.73 2.73l.78 1.35a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.78-1.35a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.73v-.5a2 2 0 0 1 1-1.73l-.15-.08a2 2 0 0 0 .73-2.73l-.78-1.35a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+            />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          Configurações
         </a>
-        <a href="#">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.78 1.35a2 2 0 0 0 .73 2.73l.15.08a2 2 0 0 1 1 1.73v.5a2 2 0 0 1-1 1.73l-.15.08a2 2 0 0 0-.73 2.73l.78 1.35a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.78-1.35a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.73v-.5a2 2 0 0 1 1-1.73l-.15-.08a2 2 0 0 0 .73-2.73l-.78-1.35a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-            Configurações
+        <a href="#" class="btn-logout" style="margin-top: auto">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-log-out"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" x2="9" y1="12" y2="12" />
+          </svg>
+          Sair
         </a>
-        <a href="#" style="margin-top: auto;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-            Sair
-        </a>
-    </aside>
+      </aside>
 
-    <main class="admin-main-content">
-        <h1>Dashboard Administrativo</h1>
+      <main class="admin-main-content">
+        <!-- MODIFICADO: Adicionada a classe page-header para consistência -->
+        <div class="page-header">
+          <h1>Dashboard Administrativo</h1>
+        </div>
 
         <div class="stats-grid-admin">
-            <div class="stat-card">
-                <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87C20.5 11.97 22 10.33 22 8c0-2.07-1.47-3.67-3.5-3.87C16.5 3.97 15 5.67 15 8c0 2.07 1.47 3.67 3.5 3.87"/></svg></div>
-                <div class="number">1.234</div>
-                <div class="label">Total de Alunas</div>
+          <div class="stat-card">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-users"
+              >
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path
+                  d="M22 21v-2a4 4 0 0 0-3-3.87C20.5 11.97 22 10.33 22 8c0-2.07-1.47-3.67-3.5-3.87C16.5 3.97 15 5.67 15 8c0 2.07 1.47 3.67 3.5 3.87"
+                />
+              </svg>
             </div>
-            <div class="stat-card">
-                <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-check"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="m9 16 2 2 4-4"/></svg></div>
-                <div class="number">42</div>
-                <div class="label">Eventos Ativos</div>
+            <div class="number">1.234</div>
+            <div class="label">Total de Alunas</div>
+          </div>
+          <div class="stat-card">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-calendar-check"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" x2="16" y1="2" y2="6" />
+                <line x1="8" x2="8" y1="2" y2="6" />
+                <line x1="3" x2="21" y1="10" y2="10" />
+                <path d="m9 16 2 2 4-4" />
+              </svg>
             </div>
-            <div class="stat-card">
-                <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 2 2 4-4"/></svg></div>
-                <div class="number">189</div>
-                <div class="label">Presenças Confirmadas (mês)</div>
+            <div class="number">42</div>
+            <div class="label">Eventos Ativos</div>
+          </div>
+          <div class="stat-card">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-check-circle"
+              >
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <path d="m9 11 2 2 4-4" />
+              </svg>
             </div>
+            <div class="number">189</div>
+            <div class="label">Presenças Confirmadas (mês)</div>
+          </div>
         </div>
 
         <div class="quick-actions-card">
-            <h3>Ações Rápidas</h3>
-            <div class="quick-actions-grid">
-                <button class="btn btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-circle"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
-                    Novo Evento
-                </button>
-                <button class="btn btn-outline">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-plus"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><line x1="12" x2="12" y1="14" y2="20"/><line x1="9" x2="15" y1="17" y2="17"/></svg>
-                    Gerenciar Eventos
-                </button>
-                <button class="btn btn-outline">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-round"><path d="M18 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12Z"/><path d="M10 6h.01"/><path d="M14 6h.01"/><path d="M10 10h.01"/><path d="M14 10h.01"/></svg>
-                    Ver Alunas
-                </button>
-                <button class="btn btn-outline">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
-                    Gerar Relatório
-                </button>
-            </div>
+          <h3>Ações Rápidas</h3>
+          <div class="quick-actions-grid">
+            <a href="admin-eventos.html" class="btn btn-primary">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-plus-circle"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M8 12h8" />
+                <path d="M12 8v8" />
+              </svg>
+              Novo Evento
+            </a>
+            <a href="admin-eventos.html" class="btn btn-outline">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-calendar-plus"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" x2="16" y1="2" y2="6" />
+                <line x1="8" x2="8" y1="2" y2="6" />
+                <line x1="3" x2="21" y1="10" y2="10" />
+                <line x1="12" x2="12" y1="14" y2="20" />
+                <line x1="9" x2="15" y1="17" y2="17" />
+              </svg>
+              Gerenciar Eventos
+            </a>
+            <button class="btn btn-outline">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-users-round"
+              >
+                <path
+                  d="M18 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12Z"
+                />
+                <path d="M10 6h.01" />
+                <path d="M14 6h.01" />
+                <path d="M10 10h.01" />
+                <path d="M14 10h.01" />
+              </svg>
+              Ver Alunas
+            </button>
+            <button class="btn btn-outline">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-file-text"
+              >
+                <path
+                  d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                />
+                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                <path d="M10 9H8" />
+                <path d="M16 13H8" />
+                <path d="M16 17H8" />
+              </svg>
+              Gerar Relatório
+            </button>
+          </div>
         </div>
 
         <div class="recent-activity-card">
-            <h3>Atividade Recente</h3>
-            <div class="activity-item">
-                <span>Nova aluna cadastrada: Maria Silva</span>
-                <span>2 min atrás</span>
-            </div>
-            <div class="activity-item">
-                <span>Presença confirmada para "Workshop Python Básico" - Joana Souza</span>
-                <span>15 min atrás</span>
-            </div>
-            <div class="activity-item">
-                <span>Novo evento criado: "Palestra Inteligência Artificial para Iniciantes"</span>
-                <span>1 hora atrás</span>
-            </div>
-            <div class="activity-item">
-                <span>Feedback recebido de "Introdução ao Web Design"</span>
-                <span>Ontem</span>
-            </div>
+          <h3>Atividade Recente</h3>
+          <div class="activity-item">
+            <span>Nova aluna cadastrada: Maria Silva</span>
+            <span>2 min atrás</span>
+          </div>
+          <div class="activity-item">
+            <span
+              >Presença confirmada para "Workshop Python Básico" - Joana
+              Souza</span
+            >
+            <span>15 min atrás</span>
+          </div>
+          <div class="activity-item">
+            <span
+              >Novo evento criado: "Palestra Inteligência Artificial para
+              Iniciantes"</span
+            >
+            <span>1 hora atrás</span>
+          </div>
+          <div class="activity-item">
+            <span>Feedback recebido de "Introdução ao Web Design"</span>
+            <span>Ontem</span>
+          </div>
         </div>
-    </main>
-  </div>
-
-  <footer class="site-footer">
-    <div class="container">
-      <p>© 2025 Meninas Digitais - UTFPR-CP. Todos os direitos reservados.</p>
+      </main>
     </div>
-  </footer>
-</body>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>© 2025 Meninas Digitais - UTFPR-CP. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+
+    <script src="./scripts/admin-auth.js" defer></script>
+  </body>
 </html>
