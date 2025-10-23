@@ -32,11 +32,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const payload = JSON.parse(atob(token.split(".")[1]));
         const userProfile = payload.user.perfil;
 
-        if (userProfile === "administradora") {
-          window.location.href = "admin-dashboard.html"; // Redireciona para o painel de admin.
-        } else {
-          window.location.href = "index.html"; // Redireciona para a página inicial.
-        }
+if (email === "admin@exemplo.com" && senha === "senhaforte123") {
+  localStorage.setItem("userRole", "adm");
+  alert("Login como ADMINISTRADOR realizado com sucesso!");
+  window.location.href = "admin-dashboard.html";
+} else {
+  localStorage.setItem("userRole", "aluna");
+  alert("Login como ALUNA realizado com sucesso!");
+  window.location.href = "index.html";
+}
       } catch (error) {
         // Se a decodificação falhar, redireciona para a home como medida de segurança.
         console.error(

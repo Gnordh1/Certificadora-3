@@ -17,31 +17,50 @@ const sobreBtnHero = document.getElementById("sobreBtnHero");
  */
 function setupAuthenticationUI() {
   const navActions = document.querySelector(".nav-actions");
-  const token = localStorage.getItem("token");
+  const userRole = localStorage.getItem("userRole"); // pode ser "aluna", "adm" ou null
 
-  if (token) {
-    // Se o usuário está logado, exibe os botões de "Meus Eventos" e "Sair".
-    navActions.innerHTML = `
-      <a href="#" id="myEventsBtn" class="nav-link">Meus Eventos</a>
-      <button id="logoutBtn" class="btn btn-primary">Sair</button>
-    `;
-
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("token");
-      alert("Você saiu da sua conta.");
-      window.location.reload(); // Recarrega a página para refletir a mudança de estado.
-    });
-
-    document.getElementById("myEventsBtn").addEventListener("click", () => {
-      alert("Funcionalidade 'Meus Eventos' a ser implementada!");
-    });
-  } else {
-    // Se não há token, exibe o botão de "Login".
+  // Usuário não logado → mostra botão de login
+  if (!userRole) {
     navActions.innerHTML = `
       <a href="login-cadastro.html" id="loginBtnNav" class="btn btn-primary">Login</a>
     `;
+    return;
   }
+
+  // === Navbar para ALUNA ===
+  if (userRole === "aluna") {
+    navActions.innerHTML = `
+      <a href="perfil-aluna.html" id="meusEventosBtn" class="btn btn-outline">Meus Eventos</a>
+      <button id="logoutBtn" class="btn btn-primary">Sair</button>
+    `;
+
+    document.getElementById("meusEventosBtn").addEventListener("click", () => {
+      window.location.href = "perfil-aluna.html";
+    });
+  }
+
+  // === Navbar para ADMIN ===
+  else if (userRole === "adm") {
+    navActions.innerHTML = `
+      <a href="admin-dashboard.html" id="dashboardBtn" class="btn btn-outline">Dashboard ADM</a>
+      <button id="logoutBtn" class="btn btn-primary">Sair</button>
+    `;
+
+    document.getElementById("dashboardBtn").addEventListener("click", () => {
+      window.location.href = "admin-dashboard.html";
+    });
+  }
+
+  // === Botão Sair (para ambos) ===
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn.addEventListener("click", () => {
+    localStorage.removeItem("userRole");
+    alert("Você saiu da sua conta.");
+    window.location.reload();   
+  });
 }
+
+
 
 /**
  * Busca os eventos da API de forma assíncrona e os renderiza na página.
