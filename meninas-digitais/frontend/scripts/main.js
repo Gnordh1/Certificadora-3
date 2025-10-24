@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Gerencia a interface de autenticação e busca os eventos públicos ao carregar a página.
   setupAuthenticationUI();
   fetchAndRenderEvents();
 });
@@ -12,55 +11,51 @@ const verEventosBtnHero = document.getElementById("verEventosBtnHero");
 const sobreBtnHero = document.getElementById("sobreBtnHero");
 
 /**
- * Verifica o estado de autenticação do usuário (através do token)
+ * Verifica o estado de autenticação do usuário (através do token e do perfil)
  * e atualiza a barra de navegação de acordo.
  */
 function setupAuthenticationUI() {
   const navActions = document.querySelector(".nav-actions");
-  const userRole = localStorage.getItem("userRole"); // pode ser "aluna", "adm" ou null
+  const token = localStorage.getItem("token");
+  const userRole = localStorage.getItem("userRole"); // "aluna" ou "administradora"
 
-  // Usuário não logado → mostra botão de login
-  if (!userRole) {
-    navActions.innerHTML = `
-      <a href="login-cadastro.html" id="loginBtnNav" class="btn btn-primary">Login</a>
-    `;
+  // Usuário não logado (sem token) → mostra botão de login
+  if (!token) {
+    navActions.innerHTML = `<a href="login-cadastro.html" id="loginBtnNav" class="btn btn-primary">Login</a>`;
     return;
   }
+
+  // Se o token existe, renderiza a UI com base no perfil do usuário
 
   // === Navbar para ALUNA ===
   if (userRole === "aluna") {
     navActions.innerHTML = `
-      <a href="perfil-aluna.html" id="meusEventosBtn" class="btn btn-outline">Meus Eventos</a>
+      <a href="perfil-aluna.html" class="btn btn-outline">Meus Eventos</a>
       <button id="logoutBtn" class="btn btn-primary">Sair</button>
     `;
-
-    document.getElementById("meusEventosBtn").addEventListener("click", () => {
-      window.location.href = "perfil-aluna.html";
-    });
   }
 
   // === Navbar para ADMIN ===
-  else if (userRole === "adm") {
+  // (CORRIGIDO) Verifica "administradora" em vez de "adm"
+  else if (userRole === "administradora") {
     navActions.innerHTML = `
-      <a href="admin-dashboard.html" id="dashboardBtn" class="btn btn-outline">Dashboard ADM</a>
+      <a href="admin-dashboard.html" class="btn btn-outline">Dashboard ADM</a>
       <button id="logoutBtn" class="btn btn-primary">Sair</button>
     `;
-
-    document.getElementById("dashboardBtn").addEventListener("click", () => {
-      window.location.href = "admin-dashboard.html";
-    });
   }
 
   // === Botão Sair (para ambos) ===
   const logoutBtn = document.getElementById("logoutBtn");
-  logoutBtn.addEventListener("click", () => {
-    localStorage.removeItem("userRole");
-    alert("Você saiu da sua conta.");
-    window.location.reload();   
-  });
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("userRole");
+
+      alert("Você saiu da sua conta.");
+      window.location.reload();
+    });
+  }
 }
-
-
 
 /**
  * Busca os eventos da API de forma assíncrona e os renderiza na página.
@@ -83,7 +78,6 @@ async function fetchAndRenderEvents() {
 
 /**
  * Renderiza a lista de eventos na grade da página.
- * @param {Array} eventsData - Um array de objetos de evento vindos da API.
  */
 function renderEvents(eventsData) {
   eventsCountEl.textContent = `${eventsData.length}+`;
@@ -93,7 +87,7 @@ function renderEvents(eventsData) {
     eventsGrid.innerHTML = "";
   } else {
     noEvents.hidden = true;
-    eventsGrid.innerHTML = ""; // Garante que a grid esteja limpa antes da nova renderização.
+    eventsGrid.innerHTML = "";
     eventsData.forEach((ev) => {
       const card = createEventCard(ev);
       eventsGrid.appendChild(card);
@@ -103,15 +97,12 @@ function renderEvents(eventsData) {
 
 /**
  * Cria um elemento HTML (card) para um único evento.
- * @param {object} event - O objeto do evento contendo seus dados.
- * @returns {HTMLElement} O elemento <article> do card pronto para ser inserido no DOM.
  */
 function createEventCard(event) {
   const card = document.createElement("article");
   card.className = "event-card";
-  card.setAttribute("data-id", event._id); // O ID do MongoDB é usado como identificador.
+  card.setAttribute("data-id", event._id);
 
-  // Mapeia os dados do backend para a estrutura do card.
   card.innerHTML = `
     <div class="cover event-badges-container">
       <span class="badge badge-type">${event.publico_alvo || "Evento"}</span>
@@ -133,7 +124,6 @@ function createEventCard(event) {
     </div>
   `;
 
-  // Adiciona o evento de clique ao botão de detalhes do card recém-criado.
   card.querySelector(".btn-join").addEventListener("click", () => {
     alert(
       `Detalhes do evento: ${event.titulo}\n\nPara se inscrever, faça o login!`
@@ -145,13 +135,9 @@ function createEventCard(event) {
 
 /**
  * Formata uma string de data para o padrão 'dd/mês/aaaa' em português.
- * @param {string} dateStr - A string de data (ex: "2024-10-31").
- * @returns {string} A data formatada.
  */
 function formatDate(dateStr) {
   try {
-    // Interpreta a data como UTC para evitar deslocamentos de fuso horário
-    // que poderiam resultar no dia errado sendo exibido.
     const d = new Date(dateStr);
     return d.toLocaleDateString("pt-BR", {
       timeZone: "UTC",
@@ -160,7 +146,7 @@ function formatDate(dateStr) {
       year: "numeric",
     });
   } catch (e) {
-    return dateStr; // Retorna a string original em caso de erro.
+    return dateStr;
   }
 }
 

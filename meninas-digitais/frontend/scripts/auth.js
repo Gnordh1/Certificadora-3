@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cadastroForm = document.getElementById("cadastro-form");
   const apiBaseUrl = "/api/auth";
 
-  // --- Lógica de Login com Redirecionamento Baseado em Perfil ---
+  // --- Lógica de Login com Redirecionamento e Armazenamento de Perfil ---
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -23,26 +23,25 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error(data.msg || "Erro ao fazer login.");
       }
 
+      // 1. Armazena o token recebido do servidor
       localStorage.setItem("token", data.token);
 
-      // Decodifica o payload do token JWT para verificar o perfil do usuário.
-      // Isso permite redirecionar administradoras e alunas para páginas diferentes.
+      // 2. Decodifica o token para obter o perfil
       try {
         const token = data.token;
         const payload = JSON.parse(atob(token.split(".")[1]));
-        const userProfile = payload.user.perfil;
+        const userProfile = payload.user.perfil; // Ex: "administradora" ou "aluna"
 
-if (email === "admin@exemplo.com" && senha === "senhaforte123") {
-  localStorage.setItem("userRole", "adm");
-  alert("Login como ADMINISTRADOR realizado com sucesso!");
-  window.location.href = "admin-dashboard.html";
-} else {
-  localStorage.setItem("userRole", "aluna");
-  alert("Login como ALUNA realizado com sucesso!");
-  window.location.href = "index.html";
-}
+        // 3. Armazena o perfil no localStorage para uso na UI
+        localStorage.setItem("userRole", userProfile);
+
+        // 4. Redireciona com base no perfil obtido do token
+        if (userProfile === "administradora") {
+          window.location.href = "admin-dashboard.html";
+        } else {
+          window.location.href = "index.html";
+        }
       } catch (error) {
-        // Se a decodificação falhar, redireciona para a home como medida de segurança.
         console.error(
           "Erro ao decodificar token, usando redirecionamento padrão:",
           error
@@ -55,7 +54,7 @@ if (email === "admin@exemplo.com" && senha === "senhaforte123") {
     }
   });
 
-  // --- Lógica de Cadastro ---
+  // --- Lógica de Cadastro  ---
   cadastroForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -85,10 +84,11 @@ if (email === "admin@exemplo.com" && senha === "senhaforte123") {
         throw new Error(data.msg || "Erro ao realizar o cadastro.");
       }
 
+      // O backend cria o usuário como 'aluna' por padrão e retorna um token.
+      // O login é implícito após o cadastro.
       localStorage.setItem("token", data.token);
+      localStorage.setItem("userRole", "aluna"); // Perfil padrão no cadastro
 
-      // Após o cadastro, o usuário é sempre redirecionado para a página inicial,
-      // pois o perfil padrão de registro é de 'aluna'.
       window.location.href = "index.html";
     } catch (error) {
       console.error("Erro no cadastro:", error);
