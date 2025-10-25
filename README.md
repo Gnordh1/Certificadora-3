@@ -216,6 +216,8 @@ O frontend é composto por arquivos estáticos que são servidos diretamente pel
 
 Você verá a página inicial (`index.html`). A partir dela, você pode navegar para a página de login/cadastro e, após logar como administrador, acessar os painéis de admin.
 
+Caso tenha ficado com alguma dúvida, disponibilizamos um vídeo mostrando o passo a passo para execução do sistema: `https://youtu.be/eoQMKPCG7Qw`
+
 ## Documentação da API (Endpoints)
 
 A seguir, a lista de endpoints da API RESTful desenvolvidos até o momento.
