@@ -116,17 +116,6 @@ table tbody tr:hover {
   background: rgba(255,255,255,0.02);
 }
 
-/* Navegação */
-.navbar {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 10px 16px;
-  border-radius: 12px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  box-shadow: 0 6px 16px rgba(2,6,23,0.4);
-}
-
 /* Responsividade */
 @media (max-width: 900px) {
   .container { padding: 12px; margin: 16px; }

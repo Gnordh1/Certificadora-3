@@ -10,10 +10,6 @@ const eventsCountEl = document.getElementById("eventsCount");
 const verEventosBtnHero = document.getElementById("verEventosBtnHero");
 const sobreBtnHero = document.getElementById("sobreBtnHero");
 
-/**
- * Verifica o estado de autenticação do usuário (através do token e do perfil)
- * e atualiza a barra de navegação de acordo.
- */
 function setupAuthenticationUI() {
   const navActions = document.querySelector(".nav-actions");
   const token = localStorage.getItem("token");
@@ -36,7 +32,6 @@ function setupAuthenticationUI() {
   }
 
   // === Navbar para ADMIN ===
-  // (CORRIGIDO) Verifica "administradora" em vez de "adm"
   else if (userRole === "administradora") {
     navActions.innerHTML = `
       <a href="admin-dashboard.html" class="btn btn-outline">Dashboard ADM</a>
@@ -156,9 +151,3 @@ verEventosBtnHero?.addEventListener("click", (e) => {
   document.getElementById("events")?.scrollIntoView({ behavior: "smooth" });
 });
 
-sobreBtnHero?.addEventListener("click", (e) => {
-  e.preventDefault();
-  window.alert(
-    "Sobre o projeto: Meninas Digitais - UTFPR-CP. Ferramenta para gestão de oficinas e minicursos."
-  );
-});
