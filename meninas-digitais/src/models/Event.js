@@ -38,6 +38,14 @@ const eventoSchema = new Schema(
         ref: "User",
       },
     ],
+    status: {
+      type: String,
+      enum: {
+        values: ["Agendado", "Concluído", "Cancelado"],
+        message: "{VALUE} não é um status válido.",
+      },
+      default: "Agendado",
+    },
   },
   {
     timestamps: true,

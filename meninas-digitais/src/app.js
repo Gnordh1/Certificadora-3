@@ -11,6 +11,8 @@ const bcrypt = require("bcryptjs");
 const authRoutes = require("./routes/authRoutes");
 const eventoRoutes = require("./routes/eventRoutes");
 const userRoutes = require("./routes/userRoutes");
+const feedbackRoutes = require("./routes/feedbackRoutes");
+const statsRoutes = require("./routes/statsRoutes");
 
 const app = express();
 
@@ -25,6 +27,8 @@ app.use(express.static(path.join(__dirname, "..", "frontend")));
 app.use("/api/auth", authRoutes);
 app.use("/api/eventos", eventoRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/feedbacks", feedbackRoutes);
+app.use("/api/stats", statsRoutes);
 
 // Rota "catch-all" para servir o index.html
 app.get(/.*/, (req, res) => {
@@ -90,7 +94,6 @@ const startServer = async () => {
     process.exit(1);
   }
 };
-
 
 // Inicia o servidor
 startServer();

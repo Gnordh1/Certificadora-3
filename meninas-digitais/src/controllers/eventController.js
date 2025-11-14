@@ -183,3 +183,61 @@ exports.unenrollEvento = async (req, res) => {
     res.status(500).send("Erro no Servidor");
   }
 };
+
+/**
+ * @desc    Obter a lista de participantes de um evento específico.
+ * @route   GET /api/eventos/:id/participantes
+ * @access  Privado/Admin
+ */
+exports.getEventParticipants = async (req, res) => {
+  try {
+    const evento = await Evento.findById(req.params.id).populate(
+      "participantes",
+      "nome email" // Seleciona apenas os campos 'nome' e 'email' do usuário
+    );
+
+    if (!evento) {
+      return res.status(404).json({ msg: "Evento não encontrado" });
+    }
+
+    res.json(evento.participantes);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Erro no Servidor");
+  }
+};
+
+/**
+ * @desc    Atualizar o status de um evento (ex: para Concluído ou Cancelado).
+ * @route   PATCH /api/eventos/:id/status
+ * @access  Privado/Admin
+ */
+exports.updateEventStatus = async (req, res) => {
+  const { status } = req.body;
+
+  // Validação de entrada
+  const allowedStatus = ["Agendado", "Concluído", "Cancelado"];
+  if (!status || !allowedStatus.includes(status)) {
+    return res
+      .status(400)
+      .json({
+        msg: "Forneça um status válido: Agendado, Concluído ou Cancelado.",
+      });
+  }
+
+  try {
+    const evento = await Evento.findById(req.params.id);
+
+    if (!evento) {
+      return res.status(404).json({ msg: "Evento não encontrado" });
+    }
+
+    evento.status = status;
+    await evento.save();
+
+    res.json(evento);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Erro no Servidor");
+  }
+};
