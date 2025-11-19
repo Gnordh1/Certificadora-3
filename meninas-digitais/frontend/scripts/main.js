@@ -26,7 +26,7 @@ function setupAuthenticationUI() {
   // === Navbar para ALUNA ===
   if (userRole === "aluna") {
     navActions.innerHTML = `
-      <a href="perfil-aluna.html" class="btn btn-outline">Meus Eventos</a>
+      <a href="perfil-aluna.html" class="btn btn-outline">Meu Perfil</a>
       <button id="logoutBtn" class="btn btn-primary">Sair</button>
     `;
   }
@@ -114,16 +114,15 @@ function createEventCard(event) {
       </p>
       <p class="event-desc">${event.descricao}</p>
       <div class="card-actions">
-        <button class="btn btn-join btn-primary">Ver Detalhes</button>
+        <a 
+            href="detalhes-evento.html?id=${event._id}" 
+            class="btn btn-join btn-primary"
+        >
+           Inscreva-se
+        </a>
       </div>
     </div>
   `;
-
-  card.querySelector(".btn-join").addEventListener("click", () => {
-    alert(
-      `Detalhes do evento: ${event.titulo}\n\nPara se inscrever, faça o login!`
-    );
-  });
 
   return card;
 }

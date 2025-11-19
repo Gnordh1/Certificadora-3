@@ -29,4 +29,5 @@ router.patch("/:id/status", protect, isAdmin, updateEventStatus);
 router.post("/:id/enroll", protect, isStudent, enrollEvento);
 router.post("/:id/unenroll", protect, isStudent, unenrollEvento);
 
+
 module.exports = router;

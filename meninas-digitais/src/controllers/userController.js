@@ -3,6 +3,16 @@ const User = require("../models/User");
 // @desc    Obter os eventos em que o usuário logado está inscrito
 // @route   GET /api/users/my-events
 // @access  Privado/Aluna
+exports.getMyProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-senha'); // Exclui a senha
+    res.json(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Erro no servidor');
+  }
+};
+
 exports.getMyEvents = async (req, res) => {
   try {
     // Encontra o usuário e popula o campo 'eventos_inscritos'

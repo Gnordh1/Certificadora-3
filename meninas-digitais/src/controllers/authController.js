@@ -30,6 +30,9 @@ exports.registerAdmin = async (req, res) => {
     const payload = {
       user: {
         id: user.id,
+        perfil: user.perfil,
+        nome: user.nome,      // ← ADICIONE ESTA LINHA
+        email: user.email     // ← ADICIONE ESTA LINHA
       },
     };
 
@@ -68,8 +71,10 @@ exports.loginUser = async (req, res) => {
     // Gera o token JWT
     const payload = {
       user: {
-        id: user.id,
-        perfil: user.perfil,
+      id: user.id,
+      perfil: user.perfil,
+      nome: user.nome,      // ← ADICIONE ESTA LINHA
+      email: user.email     // ← ADICIONE ESTA LINHA
       },
     };
 
@@ -117,6 +122,8 @@ exports.registerUser = async (req, res) => {
       user: {
         id: user.id,
         perfil: user.perfil,
+        nome: user.nome,      // ← ADICIONE ESTA LINHA
+        email: user.email     // ← ADICIONE ESTA LINHA
       },
     };
 
