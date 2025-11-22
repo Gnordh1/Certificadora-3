@@ -73,25 +73,23 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    eventsContainer.innerHTML = ""; // Limpa o loading
+    eventsContainer.innerHTML = "";
 
     events.forEach((event) => {
-      // A. Lógica de Status (Cores e Texto)
-      let statusColor = "var(--primary-color-start)"; // Roxo padrão
+      let statusColor = "var(--primary-color-start)";
       let statusText = "Inscrita";
-      let statusBg = "#f3e5f5"; // Fundo roxo claro
+      let statusBg = "#f3e5f5";
 
       if (event.status === "Concluído") {
-        statusColor = "#2e7d32"; // Verde escuro
-        statusBg = "#e8f5e9"; // Verde claro
+        statusColor = "#2e7d32";
+        statusBg = "#e8f5e9";
         statusText = "Concluído ✅";
       } else if (event.status === "Cancelado") {
-        statusColor = "#c62828"; // Vermelho escuro
-        statusBg = "#ffebee"; // Vermelho claro
+        statusColor = "#c62828";
+        statusBg = "#ffebee";
         statusText = "Cancelado 🚫";
       }
 
-      // B. Correção da Data (Evita "Invalid Date")
       let dateStr = "Data a definir";
       if (event.data) {
         try {
@@ -106,9 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // C. Criação do Card (HTML)
       const card = document.createElement("div");
-      card.className = "event-card"; // Usa a classe do styles.css
-
-      // Estilização inline para layout horizontal específico desta página
+      card.className = "event-card";
       card.style.display = "flex";
       card.style.flexDirection = "row";
       card.style.alignItems = "center";
@@ -142,4 +138,82 @@ document.addEventListener("DOMContentLoaded", async () => {
       eventsContainer.appendChild(card);
     });
   }
+  // =======================================================
+  // 5. LÓGICA DE EDIÇÃO DE PERFIL (ATUALIZADA)
+  // =======================================================
+  const editModal = document.getElementById("editProfileModal");
+  const editBtn = document.getElementById("editProfileBtn");
+  const cancelEditBtn = document.getElementById("cancelEditBtn");
+  const overlay = document.querySelector("#editProfileModal .modal-overlay");
+  const editForm = document.getElementById("editProfileForm");
+
+  const inputNome = document.getElementById("editNome");
+  const inputEmail = document.getElementById("editEmail"); // Novo
+  const inputSenha = document.getElementById("editSenha");
+
+  // Função para abrir modal e preencher dados atuais
+  editBtn.addEventListener("click", () => {
+    // Tenta pegar os dados mais recentes do token atual
+    try {
+      // Recarrega o token do localStorage para garantir que é o último
+      const currentToken = localStorage.getItem("token");
+      const payload = JSON.parse(atob(currentToken.split(".")[1]));
+
+      inputNome.value = payload.user.nome || "";
+      inputEmail.value = payload.user.email || ""; // Preenche o email
+    } catch (e) {
+      // Fallback visual caso dê erro no token
+      inputNome.value = userNameDisplay.textContent.replace("Olá, ", "");
+      inputEmail.value = "";
+    }
+    inputSenha.value = "";
+    editModal.classList.add("show");
+  });
+
+  // Funções para fechar modal
+  const closeEditModal = () => editModal.classList.remove("show");
+  cancelEditBtn.addEventListener("click", closeEditModal);
+  overlay.addEventListener("click", closeEditModal);
+
+  // Envio do Formulário
+  editForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const novoNome = inputNome.value;
+    const novoEmail = inputEmail.value;
+    const novaSenha = inputSenha.value;
+
+    // Monta o objeto de envio
+    const bodyData = {
+      nome: novoNome,
+      email: novoEmail,
+    };
+    if (novaSenha) {
+      bodyData.senha = novaSenha;
+    }
+
+    try {
+      const res = await fetch("/api/users/me", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(bodyData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.msg || "Erro ao atualizar perfil");
+      }
+      localStorage.setItem("token", data.token);
+      userNameDisplay.textContent = `Olá, ${data.user.nome}`;
+      closeEditModal();
+      alert("Perfil atualizado com sucesso!");
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  });
 });

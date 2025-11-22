@@ -70,7 +70,6 @@ async function fetchAndRenderEvents() {
 }
 
 function renderEvents(eventsData) {
-  // Proteção: Só executa se os elementos existirem
   if (eventsCountEl) eventsCountEl.textContent = `${eventsData.length}+`;
 
   if (eventsData.length === 0) {

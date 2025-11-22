@@ -1,5 +1,6 @@
 const Evento = require("../models/Event");
 const User = require("../models/User");
+const Feedback = require("../models/Feedback");
 
 // @desc    Criar um novo evento
 // @route   POST /api/eventos
@@ -83,20 +84,34 @@ exports.updateEvento = async (req, res) => {
   }
 };
 
-// @desc    Deletar um evento
+// @desc    Deletar um evento e limpar referências
 // @route   DELETE /api/eventos/:id
 // @access  Privado/Admin
 exports.deleteEvento = async (req, res) => {
   try {
+    // 1. Busca o evento para garantir que existe e pegar a lista de participantes
     const evento = await Evento.findById(req.params.id);
 
     if (!evento) {
       return res.status(404).json({ msg: "Evento não encontrado" });
     }
 
+    // 2. Remove o ID do evento do array 'eventos_inscritos' de TODOS os usuários que estavam participando
+    // Usamos $in para buscar apenas os usuários afetados e $pull para remover o ID
+    if (evento.participantes.length > 0) {
+      await User.updateMany(
+        { _id: { $in: evento.participantes } },
+        { $pull: { eventos_inscritos: evento._id } }
+      );
+    }
+
+    // 3. Deleta todos os feedbacks associados a este evento
+    await Feedback.deleteMany({ evento: evento._id });
+
+    // 4. Finalmente, deleta o evento
     await Evento.findByIdAndDelete(req.params.id);
 
-    res.json({ msg: "Evento removido com sucesso" });
+    res.json({ msg: "Evento e dados associados removidos com sucesso" });
   } catch (error) {
     console.error(error.message);
     if (error.kind === "ObjectId") {
@@ -104,46 +119,6 @@ exports.deleteEvento = async (req, res) => {
         .status(404)
         .json({ msg: "Evento não encontrado (ID mal formatado)" });
     }
-    res.status(500).send("Erro no Servidor");
-  }
-};
-
-// @desc    Inscrever usuário logado em um evento
-// @route   POST /api/eventos/:id/enroll
-// @access  Privado/Aluna
-exports.enrollEvento = async (req, res) => {
-  try {
-    const evento = await Evento.findById(req.params.id);
-    const user = await User.findById(req.user.id);
-
-    if (!evento) {
-      return res.status(404).json({ msg: "Evento não encontrado" });
-    }
-
-    // 1. Verifica se ainda há vagas
-    if (evento.participantes.length >= evento.numero_vagas) {
-      return res
-        .status(400)
-        .json({ msg: "Não há mais vagas para este evento" });
-    }
-
-    // 2. Verifica se o usuário já está inscrito
-    if (evento.participantes.includes(req.user.id)) {
-      return res
-        .status(400)
-        .json({ msg: "Você já está inscrito(a) neste evento" });
-    }
-
-    // Inscreve o usuário
-    evento.participantes.push(req.user.id);
-    user.eventos_inscritos.push(evento.id);
-
-    await evento.save();
-    await user.save();
-
-    res.json({ msg: "Inscrição realizada com sucesso!" });
-  } catch (error) {
-    console.error(error.message);
     res.status(500).send("Erro no Servidor");
   }
 };
@@ -158,6 +133,14 @@ exports.unenrollEvento = async (req, res) => {
 
     if (!evento) {
       return res.status(404).json({ msg: "Evento não encontrado" });
+    }
+
+    if (evento.status !== "Agendado") {
+      return res
+        .status(400)
+        .json({
+          msg: "Não é possível cancelar inscrição de eventos concluídos ou cancelados.",
+        });
     }
 
     // Verifica se o usuário realmente está inscrito

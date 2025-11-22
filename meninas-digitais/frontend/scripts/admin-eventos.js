@@ -62,7 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
       // Botão de Feedback (SEM ESTRELA)
       let feedbackBtn = "";
       if (event.status === "Concluído") {
-        // REMOVIDO O ÍCONE ⭐ DAQUI ABAIXO
         feedbackBtn = `<button class="btn btn-primary btn-feedback" style="padding: 4px 8px; font-size: 0.8rem; background-color: #6f42c1;" data-id="${event._id}" data-title="${event.titulo}">Ver Avaliações</button>`;
       }
 

@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
 
-  if (!token) return; // auth.js cuida do redirect
+  if (!token) return;
 
   const dom = {
     alunas: document.getElementById("totalAlunas"),
@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const data = await res.json();
 
-    // Atualiza a tela com animação simples (opcional) ou texto direto
     dom.alunas.textContent = data.totalAlunas || 0;
     dom.eventos.textContent = data.totalEventos || 0;
     dom.inscricoes.textContent = data.totalInscricoes || 0;

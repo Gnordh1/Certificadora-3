@@ -95,9 +95,28 @@
             </svg>
           </div>
           <!-- ID IMPORTANTE: userNameDisplay (O JS procura isso) -->
-          <h1 id="userNameDisplay" style="margin: 0; color: var(--foreground)">
-            Minha Área
-          </h1>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 10px;
+            "
+          >
+            <h1
+              id="userNameDisplay"
+              style="margin: 0; color: var(--foreground)"
+            >
+              Minha Área
+            </h1>
+            <button
+              id="editProfileBtn"
+              class="btn btn-outline"
+              style="padding: 5px 10px; font-size: 0.8rem"
+            >
+              ✏️ Editar
+            </button>
+          </div>
           <p style="color: var(--muted-foreground); margin-top: 5px">
             Bem-vinda ao seu espaço de aprendizado
           </p>
@@ -124,6 +143,43 @@
           </p>
         </div>
       </div>
+      <!-- Modal de Edição de Perfil -->
+      <div id="editProfileModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+          <h2>Editar Perfil</h2>
+          <form id="editProfileForm" class="modal-form">
+            <div class="form-group">
+              <label for="editNome">Nome Completo</label>
+              <input type="text" id="editNome" required />
+            </div>
+
+            <!-- NOVO CAMPO DE E-MAIL -->
+            <div class="form-group">
+              <label for="editEmail">E-mail</label>
+              <input type="email" id="editEmail" required />
+            </div>
+
+            <div class="form-group">
+              <label for="editSenha">Nova Senha (opcional)</label>
+              <input
+                type="password"
+                id="editSenha"
+                placeholder="Deixe em branco para manter a atual"
+              />
+            </div>
+
+            <div class="form-actions">
+              <button type="button" id="cancelEditBtn" class="btn btn-outline">
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Salvar Alterações
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </main>
 
     <footer class="site-footer">
@@ -133,9 +189,7 @@
     </footer>
 
     <!-- Scripts -->
-    <!-- O main.js cuida do menu (Sair/Login) -->
     <script src="./scripts/main.js"></script>
-    <!-- O perfil-aluna.js preenche os dados da página -->
     <script src="./scripts/perfil-aluna.js"></script>
   </body>
 </html>
