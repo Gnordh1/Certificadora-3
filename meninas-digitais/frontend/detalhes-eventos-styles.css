@@ -3,24 +3,23 @@
 /* ================================================= */
 
 .event-detail-container {
-    padding-top: 40px;
-    padding-bottom: 60px;
-    /* Adiciona padding lateral em telas muito grandes, se o .container não fizer */
-    padding-left: 1rem; 
-    padding-right: 1rem;
+  padding-top: 40px;
+  padding-bottom: 60px;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 /* Força a largura máxima do container principal para o conteúdo dos detalhes */
 /* Use um valor menor que 1200px. Por exemplo, 900px ou 1000px. */
 .container {
-    max-width: 1000px !important; /* Mude este valor para o que desejar (ex: 900px, 1100px) */
-    margin-left: auto !important;
-    margin-right: auto !important;
+  max-width: 1000px !important; /* Mude este valor para o que desejar (ex: 900px, 1100px) */
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 /* Você pode precisar reforçar o max-width para o grid se ele estiver ignorando o container */
 .event-detail-container .grid-2-cols {
-    max-width: 100%; /* Garante que o grid use toda a largura disponível do container */
+  max-width: 100%; /* Garante que o grid use toda a largura disponível do container */
 }
 
 /* ================================================= */
@@ -28,35 +27,35 @@
 /* ================================================= */
 
 .btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 2rem;
-    padding: 8px 15px; /* Reintroduzindo padding horizontal para o formato de botão */
-    font-size: 1rem;
-    font-weight: 500;
-    
-    /* ESTADO NORMAL: Transparente, texto cinza, sem borda */
-    color: var(white); /* Texto cinza padrão */
-    background: transparent;
-    border: none; /* Sem borda no estado normal */
-    
-    border-radius: var(--radius-sm); /* Mantém o arredondamento */
-    cursor: pointer;
-    transition: all 0.2s ease; /* Transição suave */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2rem;
+  padding: 8px 15px; /* Reintroduzindo padding horizontal para o formato de botão */
+  font-size: 1rem;
+  font-weight: 500;
+
+  /* ESTADO NORMAL: Transparente, texto cinza, sem borda */
+  color: var(white); /* Texto cinza padrão */
+  background: transparent;
+  border: none; /* Sem borda no estado normal */
+
+  border-radius: var(--radius-sm); /* Mantém o arredondamento */
+  cursor: pointer;
+  transition: all 0.2s ease; /* Transição suave */
 }
 
 /* EFEITO HOVER: Fundo azul, texto branco */
 .btn-back:hover {
-    background: var(--info-fg); /* Fundo azul (info-bg do seu styles.css) */
-    color: white; /* Texto branco (info-fg do seu styles.css) */
-    /* Você pode adicionar um transform: translateY(-2px); para um efeito de "levantar" */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Uma pequena sombra no hover */
+  background: var(--info-fg); /* Fundo azul (info-bg do seu styles.css) */
+  color: white; /* Texto branco (info-fg do seu styles.css) */
+  /* Você pode adicionar um transform: translateY(-2px); para um efeito de "levantar" */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Uma pequena sombra no hover */
 }
 
 /* Garante que o SVG (ícone) herde a cor do texto do botão */
 .btn-back svg {
-    stroke: currentColor; 
+  stroke: currentColor;
 }
 
 /* ================================================= */
@@ -65,34 +64,34 @@
 
 /* Grid principal com 2 colunas ALINHADAS */
 .main-content-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
 }
 
 @media (min-width: 900px) {
-    .main-content-grid {
-        /* Colunas mais compactas - esquerda maior, direita menor */
-        grid-template-columns: 1.5fr 1.5fr;
-        align-items: end;
-        gap: 2rem;
-    }
+  .main-content-grid {
+    /* Colunas mais compactas - esquerda maior, direita menor */
+    grid-template-columns: 1.5fr 1.5fr;
+    align-items: end;
+    gap: 2rem;
+  }
 }
 
 /* Coluna da esquerda - Título + Detalhes */
 .left-column {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 100%;
 }
 
 /* Coluna da direita - Apenas formulário */
 .right-column {
-    position: sticky;
-    top: 2rem;
-    max-width: 100%;
+  position: sticky;
+  top: 2rem;
+  max-width: 100%;
 }
 
 /* ================================================= */
@@ -100,33 +99,33 @@
 /* ================================================= */
 
 .event-header {
-    display: block !important;
-    width: 100% !important;
-    margin-bottom: 0.5rem !important;
+  display: block !important;
+  width: 100% !important;
+  margin-bottom: 0.5rem !important;
 }
 
 .event-header h1 {
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
-    font-weight: 800;
-    margin: 0 0 0.5rem 0;
-    color: var(--foreground);
-    display: block !important;
-    width: 100% !important;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  margin: 0 0 0.5rem 0;
+  color: var(--foreground);
+  display: block !important;
+  width: 100% !important;
 }
 
 .event-description {
-    font-size: 1rem !important;
-    color: var(--muted-foreground);
-    line-height: 1.6;
-    margin: 0 0 1rem 0 !important;
-    display: block !important;
-    width: 100% !important;
-    order: 2 !important;
+  font-size: 1rem !important;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+  margin: 0 0 1rem 0 !important;
+  display: block !important;
+  width: 100% !important;
+  order: 2 !important;
 }
 
 /* Se a descrição estiver vazia, esconde o elemento */
 .event-description:empty {
-    display: none;
+  display: none;
 }
 
 /* ================================================= */
@@ -134,64 +133,64 @@
 /* ================================================= */
 
 .info-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    height: fit-content;
-    max-width: 100%;
-    width: 100%;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  height: fit-content;
+  max-width: 100%;
+  width: 100%;
 }
 
 /* Card de detalhes do evento COMPACTO */
 .event-details-card {
-    padding: 1rem !important;
-    border-bottom: none;
+  padding: 1rem !important;
+  border-bottom: none;
 }
 
 .event-details-card h2 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin: 0 0 0.75rem 0;
-    color: var(--foreground);
-    border-bottom: none;
-    padding-bottom: 0.5rem !important;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem 0;
+  color: var(--foreground);
+  border-bottom: none;
+  padding-bottom: 0.5rem !important;
 }
 
 /* Card do formulário */
 .registration-card {
-    margin: 0;
+  margin: 0;
 }
 
 .registration-card .card-header-custom h2 {
-    font-size: 1.3rem;
-    margin: 0;
+  font-size: 1.3rem;
+  margin: 0;
 }
 
 .registration-card .card-description {
-    font-size: 0.9rem;
-    color: var(--muted-foreground);
-    margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--muted-foreground);
+  margin-top: 0.25rem;
 }
 
 /* Header interno dos Cards */
 .card-header-custom {
-    margin-bottom: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: none;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: none;
 }
 
 .card-header-custom h2 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin: 0;
-    color: var(--foreground);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--foreground);
 }
 
 .card-header-custom .card-description {
-    font-size: 0.9rem;
-    color: var(--muted-foreground);
-    margin-top: 4px;
+  font-size: 0.9rem;
+  color: var(--muted-foreground);
+  margin-top: 4px;
 }
 
 /* ================================================= */
@@ -199,53 +198,53 @@
 /* ================================================= */
 
 .detail-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 0.75rem !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 0.75rem !important;
 }
 
 .icon-detail {
-    font-size: 1.2rem !important;
-    line-height: 1;
+  font-size: 1.2rem !important;
+  line-height: 1;
 }
 
 .detail-item .detail-text {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .detail-item strong {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--foreground);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--foreground);
 }
 
 .detail-item span {
-    font-size: 0.9rem;
-    color: var(--muted-foreground);
+  font-size: 0.9rem;
+  color: var(--muted-foreground);
 }
 
 /* Vagas / Status COMPACTO */
 .vagas-info {
-    margin-top: 1rem !important;
-    padding-top: 0.75rem !important;
-    border-top: 1px solid var(--border);
+  margin-top: 1rem !important;
+  padding-top: 0.75rem !important;
+  border-top: 1px solid var(--border);
 }
 
 .vagas-count {
-    font-size: 1.5rem !important;
-    font-weight: 700;
-    margin-top: 0.25rem;
-    color: var(--primary-color-start);
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: var(--primary-color-start);
 }
 
 .status-available {
-    color: hsl(142 71% 45%);
+  color: hsl(142 71% 45%);
 }
 
 .status-soldout {
-    color: hsl(0 80% 50%);
+  color: hsl(0 80% 50%);
 }
 
 /* ================================================= */
@@ -253,15 +252,15 @@
 /* ================================================= */
 
 .form-group {
-    margin-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .form-group label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 6px;
-    color: var(--foreground);
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--foreground);
 }
 
 .info-card input[type="text"],
@@ -269,47 +268,47 @@
 .info-card input[type="tel"],
 .info-card input[type="number"],
 .info-card textarea {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    background: hsl(var(--background-h) var(--background-s) var(--background-l));
-    color: var(--foreground);
-    font-size: 0.95rem;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: hsl(var(--background-h) var(--background-s) var(--background-l));
+  color: var(--foreground);
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .info-card input:focus {
-    outline: none;
-    border-color: var(--primary-color-start);
-    box-shadow: 0 0 0 3px rgba(118, 79, 219, 0.15);
+  outline: none;
+  border-color: var(--primary-color-start);
+  box-shadow: 0 0 0 3px rgba(118, 79, 219, 0.15);
 }
 
 /* Botão de Envio */
 .btn-submit {
-    width: 100%;
-    padding: 10px;
-    margin-top: 1rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--primary-foreground);
-    border: none;
-    border-radius: var(--radius-sm);
-    background: var(--gradient-primary);
-    cursor: pointer;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+  width: 100%;
+  padding: 10px;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--gradient-primary);
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .btn-submit:hover:not([disabled]) {
-    opacity: 0.9;
-    transform: translateY(-1px);
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 .btn-submit[disabled] {
-    background: var(--muted);
-    color: var(--muted-foreground);
-    cursor: not-allowed;
-    opacity: 0.8;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  cursor: not-allowed;
+  opacity: 0.8;
 }
 
 /* ================================================= */
@@ -317,33 +316,33 @@
 /* ================================================= */
 
 @media (max-width: 899px) {
-    .event-detail-container {
-        padding-top: 20px;
-        padding-bottom: 40px;
-    }
-    
-    .main-content-grid {
-        gap: 1rem;
-    }
-    
-    .left-column {
-        gap: 1rem;
-    }
-    
-    .right-column {
-        position: static;
-    }
+  .event-detail-container {
+    padding-top: 20px;
+    padding-bottom: 40px;
+  }
+
+  .main-content-grid {
+    gap: 1rem;
+  }
+
+  .left-column {
+    gap: 1rem;
+  }
+
+  .right-column {
+    position: static;
+  }
 }
 
 /* Remove estilos antigos que podem conflitar */
 .grid-2-cols {
-    display: none;
+  display: none;
 }
 
 .header-details {
-    display: none;
+  display: none;
 }
 
 .description-text {
-    display: none;
+  display: none;
 }

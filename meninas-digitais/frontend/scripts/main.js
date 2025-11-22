@@ -1,60 +1,56 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // 1. Configura a Navbar (Funciona em todas as páginas)
   setupAuthenticationUI();
-  fetchAndRenderEvents();
+
+  // 2. Só busca eventos se estivermos na página que tem o grid (Home)
+  const eventsGrid = document.getElementById("eventsGrid");
+  if (eventsGrid) {
+    fetchAndRenderEvents();
+  }
 });
 
-// --- Seletores de Elementos do DOM ---
+// --- Seletores Globais (podem ser null dependendo da página) ---
 const eventsGrid = document.getElementById("eventsGrid");
 const noEvents = document.getElementById("noEvents");
 const eventsCountEl = document.getElementById("eventsCount");
 const verEventosBtnHero = document.getElementById("verEventosBtnHero");
-const sobreBtnHero = document.getElementById("sobreBtnHero");
 
 function setupAuthenticationUI() {
   const navActions = document.querySelector(".nav-actions");
-  const token = localStorage.getItem("token");
-  const userRole = localStorage.getItem("userRole"); // "aluna" ou "administradora"
+  // Proteção extra caso a navbar não tenha a classe .nav-actions
+  if (!navActions) return;
 
-  // Usuário não logado (sem token) → mostra botão de login
+  const token = localStorage.getItem("token");
+  const userRole = localStorage.getItem("userRole");
+
   if (!token) {
     navActions.innerHTML = `<a href="login-cadastro.html" id="loginBtnNav" class="btn btn-primary">Login</a>`;
     return;
   }
 
-  // Se o token existe, renderiza a UI com base no perfil do usuário
-
-  // === Navbar para ALUNA ===
   if (userRole === "aluna") {
     navActions.innerHTML = `
-      <a href="perfil-aluna.html" class="btn btn-outline">Meu Perfil</a>
+      <a href="perfil-aluna.html" class="btn btn-outline">Meus Eventos</a>
       <button id="logoutBtn" class="btn btn-primary">Sair</button>
     `;
-  }
-
-  // === Navbar para ADMIN ===
-  else if (userRole === "administradora") {
+  } else if (userRole === "administradora") {
     navActions.innerHTML = `
       <a href="admin-dashboard.html" class="btn btn-outline">Dashboard ADM</a>
       <button id="logoutBtn" class="btn btn-primary">Sair</button>
     `;
   }
 
-  // === Botão Sair (para ambos) ===
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       localStorage.removeItem("token");
       localStorage.removeItem("userRole");
-
       alert("Você saiu da sua conta.");
-      window.location.reload();
+      window.location.href = "index.html"; // Redireciona para home ao sair
     });
   }
 }
 
-/**
- * Busca os eventos da API de forma assíncrona e os renderiza na página.
- */
 async function fetchAndRenderEvents() {
   try {
     const response = await fetch("/api/eventos");
@@ -65,60 +61,82 @@ async function fetchAndRenderEvents() {
     renderEvents(eventsData);
   } catch (error) {
     console.error("Erro ao buscar eventos:", error);
-    noEvents.textContent =
-      "Erro ao carregar eventos. Tente novamente mais tarde.";
-    noEvents.hidden = false;
+    if (noEvents) {
+      noEvents.textContent =
+        "Erro ao carregar eventos. Tente novamente mais tarde.";
+      noEvents.hidden = false;
+    }
   }
 }
 
-/**
- * Renderiza a lista de eventos na grade da página.
- */
 function renderEvents(eventsData) {
-  eventsCountEl.textContent = `${eventsData.length}+`;
+  // Proteção: Só executa se os elementos existirem
+  if (eventsCountEl) eventsCountEl.textContent = `${eventsData.length}+`;
 
   if (eventsData.length === 0) {
-    noEvents.hidden = false;
-    eventsGrid.innerHTML = "";
+    if (noEvents) noEvents.hidden = false;
+    if (eventsGrid) eventsGrid.innerHTML = "";
   } else {
-    noEvents.hidden = true;
-    eventsGrid.innerHTML = "";
-    eventsData.forEach((ev) => {
-      const card = createEventCard(ev);
-      eventsGrid.appendChild(card);
-    });
+    if (noEvents) noEvents.hidden = true;
+    if (eventsGrid) {
+      eventsGrid.innerHTML = "";
+      eventsData.forEach((ev) => {
+        const card = createEventCard(ev);
+        eventsGrid.appendChild(card);
+      });
+    }
   }
 }
 
-/**
- * Cria um elemento HTML (card) para um único evento.
- */
 function createEventCard(event) {
   const card = document.createElement("article");
   card.className = "event-card";
   card.setAttribute("data-id", event._id);
 
+  const dataFormatada = formatDate(event.data);
+
+  // Cálculo de Vagas
+  const totalInscritos = event.participantes ? event.participantes.length : 0;
+  let vagasRestantes = event.numero_vagas - totalInscritos;
+  if (vagasRestantes < 0) vagasRestantes = 0;
+
+  // Lógica de Badge e Botão
+  let badgeClass = "badge-vacancies";
+  let badgeText = `${vagasRestantes} vagas`;
+  let btnText = "Ver Detalhes";
+
+  if (event.status === "Cancelado") {
+    badgeText = "Cancelado";
+    // Opcional: Estilo visual para cancelado
+    card.style.opacity = "0.7";
+  } else if (event.status === "Concluído") {
+    badgeText = "Concluído";
+  } else if (vagasRestantes === 0) {
+    badgeText = "Esgotado";
+  }
+
   card.innerHTML = `
     <div class="cover event-badges-container">
-      <span class="badge badge-type">${event.publico_alvo || "Evento"}</span>
-      <span class="badge badge-vacancies">${event.numero_vagas} vagas</span>
+      <span class="badge badge-type">${event.publico_alvo || "Geral"}</span>
+      <span class="badge ${badgeClass}">${badgeText}</span>
     </div>
     <div class="content">
       <h3>${event.titulo}</h3>
       <p class="event-meta-line">
-        <span class="icon-text">🗓️ ${formatDate(event.data)}</span> 
+        <span class="icon-text">🗓️ ${dataFormatada}</span> 
         <span class="icon-text">🕒 ${event.horario}</span>
       </p>
       <p class="event-meta-line">
         <span class="icon-text">📍 ${event.local}</span>
       </p>
-      <p class="event-desc">${event.descricao}</p>
+      <p class="event-desc">${
+        event.descricao ? event.descricao.substring(0, 100) + "..." : ""
+      }</p>
       <div class="card-actions">
-        <a 
-            href="detalhes-evento.html?id=${event._id}" 
-            class="btn btn-join btn-primary"
-        >
-           Inscreva-se
+        <a href="detalhes-evento.html?id=${
+          event._id
+        }" class="btn btn-join btn-primary" style="width: 100%; text-decoration: none;">
+          ${btnText}
         </a>
       </div>
     </div>
@@ -127,9 +145,6 @@ function createEventCard(event) {
   return card;
 }
 
-/**
- * Formata uma string de data para o padrão 'dd/mês/aaaa' em português.
- */
 function formatDate(dateStr) {
   try {
     const d = new Date(dateStr);
@@ -144,9 +159,10 @@ function formatDate(dateStr) {
   }
 }
 
-// --- Listeners de Eventos para a Seção Hero ---
-verEventosBtnHero?.addEventListener("click", (e) => {
-  e.preventDefault();
-  document.getElementById("events")?.scrollIntoView({ behavior: "smooth" });
-});
-
+// Scroll Hero (Só adiciona o evento se o botão existir na página)
+if (verEventosBtnHero) {
+  verEventosBtnHero.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.getElementById("events")?.scrollIntoView({ behavior: "smooth" });
+  });
+}

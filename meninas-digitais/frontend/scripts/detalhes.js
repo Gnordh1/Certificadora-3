@@ -1,347 +1,209 @@
-// =======================================================
-// 1. CONFIGURAÇÃO INICIAL E UTILITÁRIOS
-// =======================================================
+document.addEventListener("DOMContentLoaded", async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const eventId = urlParams.get("id");
 
-const getUrlParam = (param) => {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-};
+  if (!eventId) {
+    alert("Evento não especificado.");
+    window.location.href = "index.html";
+    return;
+  }
 
-const formatDate = (dateString) => {
+  const dom = {
+    title: document.getElementById("eventTitle"),
+    desc: document.getElementById("eventDescription"),
+    type: document.getElementById("eventType"),
+    vacancies: document.getElementById("eventVacancies"),
+    status: document.getElementById("eventStatus"),
+    date: document.getElementById("eventDate"),
+    time: document.getElementById("eventTime"),
+    location: document.getElementById("eventLocation"),
+    actionSection: document.getElementById("actionSection"),
+    feedbackSection: document.getElementById("feedbackSection"),
+    feedbackForm: document.getElementById("feedbackForm"),
+  };
+
+  const token = localStorage.getItem("token");
+  let currentEvent = null;
+  let userEnrollments = [];
+
+  // 1. Buscar Evento
+  try {
+    const res = await fetch(`/api/eventos/${eventId}`);
+    if (!res.ok) throw new Error("Erro ao carregar evento");
+    currentEvent = await res.json();
+    renderEventDetails(currentEvent);
+  } catch (error) {
+    dom.title.textContent = "Erro ao carregar evento.";
+    return;
+  }
+
+  // 2. Verificar se usuário já está inscrito
+  if (token) {
     try {
-        const date = new Date(dateString); 
-        return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
-    } catch {
-        return dateString;
+      const resMe = await fetch("/api/users/my-events", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (resMe.ok) {
+        const myEvents = await resMe.json();
+        userEnrollments = myEvents.map((e) => e._id);
+      }
+    } catch (err) {
+      console.error(err);
     }
-};
+  }
 
-const simulateToast = (title, description, isDestructive = false) => {
-    console.log(`[TOAST - ${isDestructive ? 'ERRO' : 'SUCESSO'}] ${title}: ${description}`);
-    alert(`${title}\n${description}`); 
-};
+  updateActionUI(currentEvent, userEnrollments, token);
 
-// =======================================================
-// 2. AUTENTICAÇÃO E DADOS DO USUÁRIO LOGADO
-// =======================================================
+  // --- FUNÇÕES ---
 
-/**
- * Obtém os dados do usuário logado a partir do token JWT
- */
-const getLoggedInUser = () => {
-    const token = localStorage.getItem("token");
+  function renderEventDetails(event) {
+    dom.title.textContent = event.titulo;
+    dom.desc.innerHTML = event.descricao.replace(/\n/g, "<br>");
+    dom.type.textContent = event.publico_alvo || "Geral";
+
+    // Cálculo de Vagas
+    const totalInscritos = event.participantes ? event.participantes.length : 0;
+    const vagasRestantes = Math.max(0, event.numero_vagas - totalInscritos);
+
+    dom.vacancies.textContent = `${vagasRestantes} vagas restantes`;
+    dom.status.textContent = event.status;
+    dom.date.textContent = new Date(event.data).toLocaleDateString("pt-BR", {
+      timeZone: "UTC",
+    });
+    dom.time.textContent = event.horario;
+    dom.location.textContent = event.local;
+  }
+
+  function updateActionUI(event, enrollments, token) {
+    const isEnrolled = enrollments.includes(event._id);
+    const isFinished = event.status === "Concluído";
+    const isCanceled = event.status === "Cancelado";
+
+    const totalInscritos = event.participantes ? event.participantes.length : 0;
+    const vagasRestantes = event.numero_vagas - totalInscritos;
+    const isSoldOut = vagasRestantes <= 0;
+
+    dom.actionSection.innerHTML = "";
+
+    // Caso 1: Não logado
     if (!token) {
-        console.warn("Nenhum token encontrado - usuário não está logado");
-        return null;
-    }
-
-    try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        return {
-            id: payload.user.id,
-            nome: payload.user.nome,
-            email: payload.user.email,
-            perfil: payload.user.perfil
-        };
-    } catch (error) {
-        console.error("Erro ao decodificar token:", error);
-        return null;
-    }
-};
-
-/**
- * Verifica se o usuário está logado e redireciona se necessário
- */
-const checkAuthentication = () => {
-    const user = getLoggedInUser();
-    if (!user) {
-        alert("Você precisa estar logado para acessar esta página.");
-        window.location.href = "login-cadastro.html";
-        return null;
-    }
-    return user;
-};
-
-// =======================================================
-// 3. INTEGRAÇÃO COM A API (FETCH)
-// =======================================================
-
-/**
- * Busca um evento real no servidor usando o ID.
- */
-async function fetchEventById(eventId) {
-    const API_URL = `/api/eventos/${eventId}`; 
-
-    try {
-        const response = await fetch(API_URL); 
-        
-        if (!response.ok) {
-            if (response.status === 404) {
-                 throw new Error("Evento não encontrado (404).");
-            }
-            throw new Error(`Erro ao buscar evento: ${response.status} ${response.statusText}`);
-        }
-        
-        return await response.json();
-        
-    } catch (error) {
-        throw error;
-    }
-}
-
-/**
- * Realiza a inscrição do usuário no evento (AGORA COM API REAL)
- */
-const registerForEvent = async (eventId, formData) => {
-    try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(`/api/eventos/${eventId}/enroll`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formData)
-        });
-
-        if (response.ok) {
-            return true;
-        } else {
-            const errorData = await response.json();
-            throw new Error(errorData.msg || "Erro ao realizar inscrição");
-        }
-    } catch (error) {
-        console.error("Erro na inscrição:", error);
-        throw error;
-    }
-};
-
-// =======================================================
-// 4. LÓGICA DE RENDERIZAÇÃO PRINCIPAL
-// =======================================================
-
-const renderEventDetails = async () => {
-    // Verifica autenticação
-    const user = checkAuthentication();
-    if (!user) return;
-
-    const container = document.getElementById('event-details-content');
-    const eventId = getUrlParam('id'); 
-
-    if (!container) {
-        console.error("ERRO FATAL: Container 'event-details-content' não encontrado.");
-        return; 
-    }
-
-    if (!eventId) {
-        container.innerHTML = `<div class="py-16 text-center"><h1 class="text-2xl font-bold mb-4">ID do Evento faltando na URL.</h1></div>`;
-        return;
-    }
-    
-    container.innerHTML = `<div class="p-8 text-center" style="color: var(--muted-foreground);">Carregando detalhes do evento...</div>`;
-    
-    try {
-        const event = await fetchEventById(eventId); 
-        
-        // Mapeamento dos dados do evento
-        const titulo = event.titulo; 
-        const descricao = event.descricao;
-        const data = event.data; 
-        const horario = event.horario;
-        const local = event.local;
-        const vagasTotal = event.numero_vagas;
-
-        // Campos Opcionais
-        const tipo = event.tipo || "Evento Não Classificado"; 
-        const publicoAlvo = event.publico_alvo || "Público Geral"; 
-        
-        // CÁLCULO DE VAGAS
-        const numParticipantes = event.participantes ? event.participantes.length : 0;
-        const vagasDisponiveis = vagasTotal - numParticipantes;
-
-        // Lógica de Status
-        document.title = `Detalhes do Evento - ${titulo}`;
-        const isAvailable = vagasDisponiveis > 0;
-
-        const vagasStatusClass = isAvailable ? "text-success" : "text-danger";
-        const vagasStatusText = `${vagasDisponiveis} de ${vagasTotal}`;
-
-        // Conteúdo HTML
-        container.innerHTML = `
-<button id="back-button" class="btn-back">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-    Voltar
-</button>
-
-<!-- GRID PRINCIPAL COM 2 COLUNAS -->
-<div class="main-content-grid">
-    
-    <!-- COLUNA ESQUERDA: Título + Detalhes do Evento -->
-    <div class="left-column">
-        
-        <!-- Título e Descrição -->
-        <div class="event-header">
-            <h1>${titulo}</h1>
-            <p class="event-description">${descricao}</p>
-        </div>
-
-        <!-- Card de Detalhes do Evento -->
-        <div class="info-card event-details-card">
-            <h2>Detalhes do Evento</h2>
-            <div class="card-content-custom">
-                <div class="detail-item">
-                    <span class="icon-detail">📅</span>
-                    <div class="detail-text">
-                        <strong>Data</strong>
-                        <span>${formatDate(data)}</span>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <span class="icon-detail">🕒</span>
-                    <div class="detail-text">
-                        <strong>Horário</strong>
-                        <span>${horario}</span>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <span class="icon-detail">📍</span>
-                    <div class="detail-text">
-                        <strong>Local</strong>
-                        <span>${local}</span>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <span class="icon-detail">👥</span>
-                    <div class="detail-text">
-                        <strong>Público-alvo</strong>
-                        <span>${publicoAlvo}</span>
-                    </div>
-                </div>
-                
-                <!-- Vagas disponíveis -->
-                <div class="vagas-info">
-                    <p class="font-medium">Vagas disponíveis</p>
-                    <p class="vagas-count ${vagasStatusClass}">
-                        ${vagasStatusText}
-                    </p>
-                </div>
-            </div>
-        </div>
-        
-    </div>
-
-    <!-- COLUNA DIREITA: Apenas Formulário -->
-    <div class="right-column">
-        <div class="info-card registration-card">
-            <div class="card-header-custom">
-                <h2 class="card-title">Formulário de Inscrição</h2>
-                <p class="card-description">Preencha seus dados para garantir sua vaga.</p>
-            </div>
-            <div class="card-content-custom">
-                <form id="registration-form">
-                    <div class="form-group">
-                        <label for="name">Nome Completo *</label>
-                        <input id="name" type="text" value="${user.nome}" placeholder="Seu nome completo" required readonly />
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email *</label>
-                        <input id="email" type="email" value="${user.email}" placeholder="seu@email.com" required readonly />
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Telefone/WhatsApp *</label>
-                        <input id="phone" type="tel" placeholder="(00) 00000-0000" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="school">Escola *</label>
-                        <input id="school" type="text" placeholder="Nome da sua escola" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="grade">Série/Ano *</label>
-                        <input id="grade" type="text" placeholder="Ex: 9º ano" required />
-                    </div>
-                    <button 
-                        type="submit" 
-                        id="submit-button"
-                        class="btn-submit"
-                        ${!isAvailable ? 'disabled' : ''}
-                    >
-                        ${isAvailable ? "Confirmar Inscrição" : "Vagas Esgotadas"}
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-    
-</div>
-`;
-        
-        setupEventListeners(event._id, user);
-
-    } catch (error) {
-        container.innerHTML = `
-            <div class="py-16 text-center">
-                <h1 class="text-2xl font-bold mb-4 text-danger">Evento Não Encontrado!</h1>
-                <p>Verifique o link ou se o servidor da API está funcionando.</p>
-                <a href="index.html" class="btn btn-primary mt-4">Voltar para a Lista de Eventos</a>
-            </div>
+      dom.actionSection.innerHTML = `
+            <h3>Gostou? Participe!</h3>
+            <p>Faça login para se inscrever.</p>
+            <a href="login-cadastro.html" class="btn btn-primary">Fazer Login</a>
         `;
+      return;
     }
-};
 
-const setupEventListeners = (eventId, user) => {
-    // 1. Botão Voltar 
-    const backButton = document.getElementById('back-button');
-    if (backButton) {
-        backButton.addEventListener('click', () => {
-            window.history.back();
+    // Caso 2: Evento Cancelado
+    if (isCanceled) {
+      dom.actionSection.innerHTML = `<div class="alert-message" style="background:#ffebee; color:#c62828; border:1px solid #ef9a9a; font-weight:bold;">⚠️ Evento Cancelado</div>`;
+      return;
+    }
+
+    // Caso 3: Usuário Inscrito
+    if (isEnrolled) {
+      if (isFinished) {
+        dom.actionSection.innerHTML = `<div class="alert-message" style="background:#e8f5e9; color:#2e7d32; border:1px solid #a5d6a7;">✅ Evento Concluído. Obrigado por participar!</div>`;
+        dom.feedbackSection.style.display = "block";
+        setupFeedbackForm(event._id, token);
+      } else {
+        dom.actionSection.innerHTML = `
+                <div style="text-align:center;">
+                    <p style="color: green; font-weight: bold; margin-bottom: 10px;">✅ Você está inscrita!</p>
+                    <button id="btnUnenroll" class="btn btn-outline" style="color:red; border-color:red;">Cancelar Inscrição</button>
+                </div>
+            `;
+        document
+          .getElementById("btnUnenroll")
+          .addEventListener("click", () => handleUnenroll(event._id, token));
+      }
+      return;
+    }
+
+    // Caso 4: Não Inscrito
+    if (isFinished) {
+      dom.actionSection.innerHTML = `<div class="alert-message">Este evento já foi encerrado.</div>`;
+    } else if (isSoldOut) {
+      dom.actionSection.innerHTML = `<div class="alert-message" style="background:#fff3cd; color:#856404; border:1px solid #ffeeba;">🚫 Vagas Esgotadas</div>`;
+    } else {
+      dom.actionSection.innerHTML = `<button id="btnEnroll" class="btn btn-primary btn-join" style="width:100%;">Inscrever-se (${vagasRestantes} vagas)</button>`;
+      document
+        .getElementById("btnEnroll")
+        .addEventListener("click", () => handleEnroll(event._id, token));
+    }
+  }
+
+  async function handleEnroll(id, token) {
+    if (!confirm("Confirmar inscrição?")) return;
+    try {
+      const res = await fetch(`/api/eventos/${id}/enroll`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert("Inscrição realizada!");
+        window.location.reload();
+      } else {
+        alert(data.msg || "Erro ao inscrever.");
+      }
+    } catch (err) {
+      alert("Erro de conexão.");
+    }
+  }
+
+  async function handleUnenroll(id, token) {
+    if (!confirm("Deseja cancelar sua inscrição?")) return;
+    try {
+      const res = await fetch(`/api/eventos/${id}/unenroll`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        alert("Inscrição cancelada.");
+        window.location.reload();
+      } else {
+        alert("Erro ao cancelar.");
+      }
+    } catch (err) {
+      alert("Erro de conexão.");
+    }
+  }
+
+  function setupFeedbackForm(eventId, token) {
+    dom.feedbackForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = {
+        eventoId: eventId,
+        satisfacao_organizacao: document.getElementById("satOrg").value,
+        satisfacao_conteudo: document.getElementById("satConteudo").value,
+        satisfacao_carga_horaria: 5,
+        pontos_positivos: document.getElementById("positivos").value,
+        pontos_negativos: document.getElementById("negativos").value,
+      };
+
+      try {
+        const res = await fetch("/api/feedbacks", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
         });
-    }
-
-    // 2. Formulário de Submissão (AGORA COM API REAL)
-    const form = document.getElementById('registration-form');
-    if (form) {
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault(); 
-            
-            const submitButton = document.getElementById('submit-button');
-            const originalText = submitButton.textContent;
-            submitButton.disabled = true;
-            submitButton.textContent = "Processando...";
-
-            const formData = {
-                participantName: document.getElementById('name').value.trim(),
-                participantEmail: document.getElementById('email').value.trim(),
-                participantPhone: document.getElementById('phone').value.trim(),
-                school: document.getElementById('school').value.trim(),
-                grade: document.getElementById('grade').value.trim(),
-                eventId: eventId
-            };
-            
-            try {
-                await registerForEvent(eventId, formData);
-                simulateToast("Inscrição realizada!", `Parabéns! Você foi inscrita no evento.`);
-                window.location.href = 'perfil-aluna.html'; 
-            } catch (error) {
-                simulateToast("Erro", error.message || "Não foi possível realizar a inscrição.", true);
-                submitButton.disabled = false;
-                submitButton.textContent = originalText;
-            }
-        });
-    }
-
-    // 3. Configurar logout
-    const logoutBtn = document.querySelector(".btn-logout");
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", () => {
-            localStorage.removeItem("token");
-            localStorage.removeItem("userRole"); 
-            alert("Você saiu da sua conta.");
-            window.location.href = "index.html";
-        });
-    }
-};
-
-// =======================================================
-// 5. INICIALIZAÇÃO
-// =======================================================
-document.addEventListener('DOMContentLoaded', renderEventDetails);
+        if (res.ok) {
+          alert("Feedback enviado!");
+          dom.feedbackForm.reset();
+          dom.feedbackSection.innerHTML =
+            "<p class='text-center text-success'>Feedback enviado com sucesso! ✨</p>";
+        } else {
+          const err = await res.json();
+          alert(err.msg);
+        }
+      } catch (error) {
+        alert("Erro ao enviar.");
+      }
+    });
+  }
+});

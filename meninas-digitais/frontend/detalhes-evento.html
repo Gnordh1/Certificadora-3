@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Detalhes do Evento - Meninas Digitais</title>
     <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="detalhes-eventos-styles.css" />
-    <script src="./scripts/detalhes.js" defer></script>
   </head>
   <body class="root-bg">
     <header class="navbar">
@@ -18,15 +16,188 @@
           <div class="brand-text">Meninas Digitais</div>
         </a>
         <nav class="nav-actions">
-          <a href="perfil-aluna.html" class="nav-link">Meu Perfil</a>
-          <button class="btn btn-outline btn-logout">Sair</button>
+          <a href="index.html" class="btn btn-outline">Voltar</a>
         </nav>
       </div>
     </header>
+
     <main>
       <div class="container event-detail-container">
-        <div id="event-details-content">
+        <!-- Cabeçalho do Evento -->
+        <div class="event-header" style="margin-bottom: 2rem">
+          <h1 id="eventTitle" style="font-size: 2.5rem; margin-bottom: 10px">
+            Carregando título...
+          </h1>
+
+          <div class="event-badges" style="display: flex; gap: 10px">
+            <span id="eventType" class="badge badge-type">...</span>
+            <span id="eventVacancies" class="badge badge-vacancies">...</span>
+            <span
+              id="eventStatus"
+              class="badge"
+              style="background-color: #6c757d"
+              >...</span
+            >
+          </div>
+        </div>
+
+        <div
+          class="event-info"
+          style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem"
+        >
+          <!-- Coluna Principal: Descrição e Ações -->
+          <div class="event-main-content">
+            <!-- Descrição do Evento -->
+            <div class="card" style="padding: 20px; margin-bottom: 20px">
+              <h3>Sobre o Evento</h3>
+              <div
+                id="eventDescription"
+                class="event-description"
+                style="line-height: 1.6; color: var(--muted-foreground)"
+              >
+                Aguarde, buscando informações...
+              </div>
             </div>
+
+            <!-- Área de Ação (Botão de Inscrever/Cancelar ou Login) -->
+            <div
+              id="actionSection"
+              class="card"
+              style="
+                padding: 20px;
+                text-align: center;
+                background-color: var(--muted);
+              "
+            >
+              <p>Verificando status de inscrição...</p>
+            </div>
+
+            <!-- Área de Feedback (Aparece só se concluído) -->
+            <div
+              id="feedbackSection"
+              class="card"
+              style="padding: 20px; margin-top: 20px; display: none"
+            >
+              <h3 style="margin-top: 0">Avalie este Evento</h3>
+              <p class="text-muted">
+                O evento foi concluído! Conte-nos o que achou.
+              </p>
+
+              <form
+                id="feedbackForm"
+                style="display: flex; flex-direction: column; gap: 15px"
+              >
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 15px;
+                  "
+                >
+                  <div class="form-group">
+                    <label>Organização (1-5)</label>
+                    <select
+                      id="satOrg"
+                      required
+                      style="width: 100%; padding: 8px"
+                    >
+                      <option value="5">5 - Excelente</option>
+                      <option value="4">4 - Muito Bom</option>
+                      <option value="3">3 - Bom</option>
+                      <option value="2">2 - Regular</option>
+                      <option value="1">1 - Ruim</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Conteúdo (1-5)</label>
+                    <select
+                      id="satConteudo"
+                      required
+                      style="width: 100%; padding: 8px"
+                    >
+                      <option value="5">5 - Excelente</option>
+                      <option value="4">4 - Muito Bom</option>
+                      <option value="3">3 - Bom</option>
+                      <option value="2">2 - Regular</option>
+                      <option value="1">1 - Ruim</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Pontos Positivos</label>
+                  <textarea
+                    id="positivos"
+                    rows="2"
+                    style="width: 100%"
+                  ></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Pontos a Melhorar</label>
+                  <textarea
+                    id="negativos"
+                    rows="2"
+                    style="width: 100%"
+                  ></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  Enviar Feedback
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Coluna Lateral: Detalhes Técnicos -->
+          <aside class="event-sidebar">
+            <div class="card" style="padding: 20px">
+              <h3 style="margin-top: 0">Detalhes Rápidos</h3>
+
+              <div
+                style="
+                  margin-bottom: 15px;
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                "
+              >
+                <span style="font-size: 1.5rem">🗓️</span>
+                <div>
+                  <strong>Data:</strong><br />
+                  <span id="eventDate">--/--/----</span>
+                </div>
+              </div>
+
+              <div
+                style="
+                  margin-bottom: 15px;
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                "
+              >
+                <span style="font-size: 1.5rem">🕒</span>
+                <div>
+                  <strong>Horário:</strong><br />
+                  <span id="eventTime">--:--</span>
+                </div>
+              </div>
+
+              <div
+                style="
+                  margin-bottom: 15px;
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                "
+              >
+                <span style="font-size: 1.5rem">📍</span>
+                <div>
+                  <strong>Local:</strong><br />
+                  <span id="eventLocation">--</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
     </main>
 
@@ -35,5 +206,9 @@
         <p>© 2025 Meninas Digitais - UTFPR-CP. Todos os direitos reservados.</p>
       </div>
     </footer>
+
+    <script src="./scripts/detalhes.js"></script>
+
+    <script src="./scripts/main.js"></script>
   </body>
 </html>

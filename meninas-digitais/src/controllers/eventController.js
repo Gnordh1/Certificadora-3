@@ -214,28 +214,57 @@ exports.getEventParticipants = async (req, res) => {
  */
 exports.updateEventStatus = async (req, res) => {
   const { status } = req.body;
-
-  // Validação de entrada
   const allowedStatus = ["Agendado", "Concluído", "Cancelado"];
+
   if (!status || !allowedStatus.includes(status)) {
-    return res
-      .status(400)
-      .json({
-        msg: "Forneça um status válido: Agendado, Concluído ou Cancelado.",
-      });
+    return res.status(400).json({ msg: "Status inválido." });
   }
 
   try {
-    const evento = await Evento.findById(req.params.id);
+    const evento = await Evento.findByIdAndUpdate(
+      req.params.id,
+      { status: status },
+      { new: true }
+    );
+    if (!evento) return res.status(404).json({ msg: "Evento não encontrado" });
+    res.json(evento);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro no Servidor");
+  }
+};
 
-    if (!evento) {
-      return res.status(404).json({ msg: "Evento não encontrado" });
+exports.enrollEvento = async (req, res) => {
+  try {
+    const evento = await Evento.findById(req.params.id);
+    const user = await User.findById(req.user.id);
+
+    if (!evento) return res.status(404).json({ msg: "Evento não encontrado" });
+
+    // 1. Validação de Status
+    if (evento.status !== "Agendado") {
+      return res
+        .status(400)
+        .json({ msg: "Este evento não aceita mais inscrições." });
     }
 
-    evento.status = status;
-    await evento.save();
+    // 2. Validação de Vagas (A melhoria principal)
+    if (evento.participantes.length >= evento.numero_vagas) {
+      return res.status(400).json({ msg: "Vagas esgotadas para este evento." });
+    }
 
-    res.json(evento);
+    // 3. Validação de Duplicidade
+    if (evento.participantes.includes(req.user.id)) {
+      return res.status(400).json({ msg: "Você já está inscrito(a)." });
+    }
+
+    evento.participantes.push(req.user.id);
+    user.eventos_inscritos.push(evento.id);
+
+    await evento.save();
+    await user.save();
+
+    res.json({ msg: "Inscrição realizada com sucesso!" });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Erro no Servidor");
