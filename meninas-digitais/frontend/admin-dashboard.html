@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Dashboard do Administrador - Meninas Digitais</title>
+    <title>Dashboard - Meninas Digitais</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body class="root-bg">
@@ -11,12 +11,7 @@
       <div class="container nav-inner">
         <a href="index.html" class="brand">
           <div class="brand-mark" aria-hidden="true">
-            <img
-              src="imagens/logo1.png"
-              alt="Logo Meninas Digitais"
-              width="100"
-              height="130"
-            />
+            <img src="imagens/logo1.png" alt="Logo" width="100" height="130" />
           </div>
           <div class="brand-text">Meninas Digitais</div>
         </a>
@@ -29,6 +24,7 @@
     <div class="admin-layout">
       <aside class="admin-sidebar">
         <h3>Admin Dashboard</h3>
+        <!-- ÍCONES SVG NA SIDEBAR (PADRONIZADO) -->
         <a href="admin-dashboard.html" class="active">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +36,6 @@
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="lucide lucide-layout-dashboard"
           >
             <rect width="7" height="9" x="3" y="3" rx="1" />
             <rect width="7" height="5" x="14" y="3" rx="1" />
@@ -60,7 +55,6 @@
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="lucide lucide-calendar-check"
           >
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
             <line x1="16" x2="16" y1="2" y2="6" />
@@ -69,68 +63,6 @@
             <path d="m9 16 2 2 4-4" />
           </svg>
           Eventos
-        </a>
-        <a href="#">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-users"
-          >
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-            <circle cx="9" cy="7" r="4" />
-            <path
-              d="M22 21v-2a4 4 0 0 0-3-3.87C20.5 11.97 22 10.33 22 8c0-2.07-1.47-3.67-3.5-3.87C16.5 3.97 15 5.67 15 8c0 2.07 1.47 3.67 3.5 3.87"
-            />
-          </svg>
-          Alunas
-        </a>
-        <a href="#">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-message-square-text"
-          >
-            <path
-              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-            />
-            <line x1="13" x2="11" y1="11" y2="11" />
-            <line x1="15" x2="9" y1="7" y2="7" />
-          </svg>
-          Feedbacks
-        </a>
-        <a href="#">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-settings"
-          >
-            <path
-              d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.78 1.35a2 2 0 0 0 .73 2.73l.15.08a2 2 0 0 1 1 1.73v.5a2 2 0 0 1-1 1.73l-.15.08a2 2 0 0 0-.73 2.73l.78 1.35a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.78-1.35a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.73v-.5a2 2 0 0 1 1-1.73l-.15-.08a2 2 0 0 0 .73-2.73l-.78-1.35a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
-            />
-            <circle cx="12" cy="12" r="3" />
-          </svg>
-          Configurações
         </a>
         <a href="#" class="btn-logout" style="margin-top: auto">
           <svg
@@ -143,7 +75,6 @@
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="lucide lucide-log-out"
           >
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
             <polyline points="16 17 21 12 16 7" />
@@ -155,12 +86,15 @@
 
       <main class="admin-main-content">
         <div class="page-header">
-          <h1>Dashboard Administrativo</h1>
+          <h1>Visão Geral</h1>
+          <p class="text-muted">Bem-vinda de volta, Administradora.</p>
         </div>
 
+        <!-- CARDS DE ESTATÍSTICAS COM ÍCONES SVG -->
         <div class="stats-grid-admin">
           <div class="stat-card">
-            <div class="icon">
+            <!-- Ícone Usuários -->
+            <div class="icon" style="color: var(--primary-color-start)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
@@ -171,7 +105,6 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="lucide lucide-users"
               >
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                 <circle cx="9" cy="7" r="4" />
@@ -180,11 +113,13 @@
                 />
               </svg>
             </div>
-            <div class="number">1.234</div>
+            <div id="totalAlunas" class="number">--</div>
             <div class="label">Total de Alunas</div>
           </div>
+
           <div class="stat-card">
-            <div class="icon">
+            <!-- Ícone Calendário -->
+            <div class="icon" style="color: #2b9cdb">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
@@ -195,20 +130,20 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="lucide lucide-calendar-check"
               >
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                 <line x1="16" x2="16" y1="2" y2="6" />
                 <line x1="8" x2="8" y1="2" y2="6" />
                 <line x1="3" x2="21" y1="10" y2="10" />
-                <path d="m9 16 2 2 4-4" />
               </svg>
             </div>
-            <div class="number">42</div>
-            <div class="label">Eventos Ativos</div>
+            <div id="totalEventos" class="number">--</div>
+            <div class="label">Eventos Criados</div>
           </div>
+
           <div class="stat-card">
-            <div class="icon">
+            <!-- Ícone Inscrições/Lista -->
+            <div class="icon" style="color: #2e7d32">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
@@ -219,32 +154,34 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="lucide lucide-check-circle"
               >
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                <path d="m9 11 2 2 4-4" />
+                <path d="M9 11l3 3L22 4" />
+                <path
+                  d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+                />
               </svg>
             </div>
-            <div class="number">189</div>
-            <div class="label">Presenças Confirmadas (mês)</div>
+            <div id="totalInscricoes" class="number">--</div>
+            <div class="label">Total de Inscrições</div>
           </div>
         </div>
 
+        <!-- ATALHOS RÁPIDOS -->
         <div class="quick-actions-card">
           <h3>Ações Rápidas</h3>
           <div class="quick-actions-grid">
             <a href="admin-eventos.html" class="btn btn-primary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
+                width="18"
+                height="18"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="lucide lucide-plus-circle"
+                style="margin-right: 5px"
               >
                 <circle cx="12" cy="12" r="10" />
                 <path d="M8 12h8" />
@@ -255,97 +192,25 @@
             <a href="admin-eventos.html" class="btn btn-outline">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
+                width="18"
+                height="18"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="lucide lucide-calendar-plus"
+                style="margin-right: 5px"
               >
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" x2="16" y1="2" y2="6" />
-                <line x1="8" x2="8" y1="2" y2="6" />
-                <line x1="3" x2="21" y1="10" y2="10" />
-                <line x1="12" x2="12" y1="14" y2="20" />
-                <line x1="9" x2="15" y1="17" y2="17" />
+                <path
+                  d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                />
+                <path
+                  d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                />
               </svg>
-              Gerenciar Eventos
+              Gerenciar Status
             </a>
-            <button class="btn btn-outline">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-users-round"
-              >
-                <path
-                  d="M18 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12Z"
-                />
-                <path d="M10 6h.01" />
-                <path d="M14 6h.01" />
-                <path d="M10 10h.01" />
-                <path d="M14 10h.01" />
-              </svg>
-              Ver Alunas
-            </button>
-            <button class="btn btn-outline">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-file-text"
-              >
-                <path
-                  d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
-                />
-                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                <path d="M10 9H8" />
-                <path d="M16 13H8" />
-                <path d="M16 17H8" />
-              </svg>
-              Gerar Relatório
-            </button>
-          </div>
-        </div>
-
-        <div class="recent-activity-card">
-          <h3>Atividade Recente</h3>
-          <div class="activity-item">
-            <span>Nova aluna cadastrada: Maria Silva</span>
-            <span>2 min atrás</span>
-          </div>
-          <div class="activity-item">
-            <span
-              >Presença confirmada para "Workshop Python Básico" - Joana
-              Souza</span
-            >
-            <span>15 min atrás</span>
-          </div>
-          <div class="activity-item">
-            <span
-              >Novo evento criado: "Palestra Inteligência Artificial para
-              Iniciantes"</span
-            >
-            <span>1 hora atrás</span>
-          </div>
-          <div class="activity-item">
-            <span>Feedback recebido de "Introdução ao Web Design"</span>
-            <span>Ontem</span>
           </div>
         </div>
       </main>
@@ -353,10 +218,11 @@
 
     <footer class="site-footer">
       <div class="container">
-        <p>© 2025 Meninas Digitais - UTFPR-CP. Todos os direitos reservados.</p>
+        <p>© 2025 Meninas Digitais - UTFPR-CP.</p>
       </div>
     </footer>
 
-    <script src="./scripts/admin-auth.js" defer></script>
+    <script src="./scripts/admin-auth.js"></script>
+    <script src="./scripts/admin-dashboard.js"></script>
   </body>
 </html>

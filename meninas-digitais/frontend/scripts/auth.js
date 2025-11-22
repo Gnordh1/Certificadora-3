@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // O backend cria o usuário como 'aluna' por padrão e retorna um token.
+      // O login é implícito após o cadastro.
       localStorage.setItem("token", data.token);
       localStorage.setItem("userRole", "aluna"); // Perfil padrão no cadastro
 

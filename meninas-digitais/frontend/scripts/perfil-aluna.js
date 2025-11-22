@@ -10,11 +10,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  // Seletores do HTML (Compatíveis com a Versão 2)
   const eventsContainer = document.getElementById("myEventsList");
   const userNameDisplay = document.getElementById("userNameDisplay");
 
   // =======================================================
-  // 2. EXIBIR DADOS DA ALUNA
+  // 2. EXIBIR DADOS DA ALUNA (Nome no topo)
   // =======================================================
   try {
     const payload = JSON.parse(atob(token.split(".")[1]));
@@ -57,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // =======================================================
-  // 4. FUNÇÃO DE RENDERIZAÇÃO
+  // 4. FUNÇÃO DE RENDERIZAÇÃO (Com correção de Data)
   // =======================================================
   function renderMyEvents(events) {
     // Caso não tenha eventos
@@ -72,23 +73,25 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    eventsContainer.innerHTML = "";
+    eventsContainer.innerHTML = ""; // Limpa o loading
 
     events.forEach((event) => {
-      let statusColor = "var(--primary-color-start)";
+      // A. Lógica de Status (Cores e Texto)
+      let statusColor = "var(--primary-color-start)"; // Roxo padrão
       let statusText = "Inscrita";
-      let statusBg = "#f3e5f5";
+      let statusBg = "#f3e5f5"; // Fundo roxo claro
 
       if (event.status === "Concluído") {
-        statusColor = "#2e7d32";
-        statusBg = "#e8f5e9";
+        statusColor = "#2e7d32"; // Verde escuro
+        statusBg = "#e8f5e9"; // Verde claro
         statusText = "Concluído ✅";
       } else if (event.status === "Cancelado") {
-        statusColor = "#c62828";
-        statusBg = "#ffebee";
+        statusColor = "#c62828"; // Vermelho escuro
+        statusBg = "#ffebee"; // Vermelho claro
         statusText = "Cancelado 🚫";
       }
 
+      // B. Correção da Data (Evita "Invalid Date")
       let dateStr = "Data a definir";
       if (event.data) {
         try {
@@ -113,7 +116,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       card.style.padding = "20px";
       card.style.marginBottom = "15px";
       card.style.gap = "15px";
-      card.style.flexWrap = "wrap";
+      card.style.flexWrap = "wrap"; // Responsivo para mobile
 
       card.innerHTML = `
         <div style="flex: 1; min-width: 200px;">

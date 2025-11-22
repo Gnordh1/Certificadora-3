@@ -47,6 +47,7 @@
         margin: 0 auto 20px;
         font-weight: bold;
       }
+      /* Ajuste para os cards de eventos nesta página */
       .event-card {
         transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
@@ -93,6 +94,7 @@
               <circle cx="12" cy="7" r="4" />
             </svg>
           </div>
+          <!-- ID IMPORTANTE: userNameDisplay (O JS procura isso) -->
           <h1 id="userNameDisplay" style="margin: 0; color: var(--foreground)">
             Minha Área
           </h1>
@@ -115,6 +117,7 @@
         </div>
 
         <!-- Lista Dinâmica de Eventos -->
+        <!-- ID IMPORTANTE: myEventsList (O JS procura isso para inserir os cards) -->
         <div id="myEventsList" class="events-list-wrapper">
           <p style="text-align: center; color: var(--muted-foreground)">
             Carregando suas informações...

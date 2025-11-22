@@ -159,6 +159,55 @@
       </div>
     </div>
 
+    <!-- ... (Mantenha todo o código anterior até antes dos scripts) ... -->
+
+    <!-- MODAL DE FEEDBACK (ADICIONE ISTO APÓS O MODAL DE CRIAR EVENTO) -->
+    <div id="feedbackModal" class="modal">
+      <div class="modal-overlay"></div>
+      <div class="modal-content" style="max-width: 700px">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+          "
+        >
+          <h2 id="feedbackModalTitle" style="margin: 0">
+            Avaliações do Evento
+          </h2>
+          <button
+            id="closeFeedbackBtn"
+            class="btn btn-outline"
+            style="padding: 5px 10px"
+          >
+            X
+          </button>
+        </div>
+
+        <!-- Resumo das Notas -->
+        <div
+          id="feedbackSummary"
+          style="
+            background: var(--muted);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+          "
+        >
+          <!-- Preenchido via JS -->
+        </div>
+
+        <!-- Lista de Comentários -->
+        <div id="feedbackList" style="max-height: 400px; overflow-y: auto">
+          <p class="text-center">Carregando...</p>
+        </div>
+      </div>
+    </div>
+
     <script src="./scripts/admin-auth.js" defer></script>
     <script src="./scripts/admin-eventos.js" defer></script>
   </body>
