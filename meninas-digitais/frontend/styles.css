@@ -938,3 +938,117 @@ main {
     margin-top: 10px;
   }
 }
+/* ==========================================================================
+   MELHORIAS NA TABELA DE ADMINISTRAÇÃO
+   ========================================================================== */
+
+/* Container da tabela para permitir rolagem horizontal em telas pequenas */
+.card-table {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  background: white;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: separate; /* Permite bordas arredondadas e espaçamento */
+  border-spacing: 0;
+  min-width: 900px; /* Garante que a tabela não fique espremida */
+}
+
+/* Cabeçalho */
+.admin-table thead th {
+  background-color: #f8f9fa;
+  color: var(--muted-foreground);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 16px;
+  border-bottom: 2px solid var(--border);
+  text-align: left;
+}
+
+/* Corpo */
+.admin-table tbody td {
+  padding: 16px;
+  vertical-align: middle; /* Centraliza verticalmente */
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+  font-size: 0.95rem;
+}
+
+.admin-table tbody tr:hover {
+  background-color: #fcfaff; /* Leve tom roxo ao passar o mouse */
+}
+
+/* --- LARGURAS DAS COLUNAS --- */
+/* Título ganha mais espaço */
+.admin-table th:nth-child(1),
+.admin-table td:nth-child(1) {
+  width: 25%;
+  font-weight: 600;
+}
+
+/* Data, Local, Vagas */
+.admin-table th:nth-child(2),
+.admin-table td:nth-child(2) {
+  width: 12%;
+} /* Data */
+
+.admin-table th:nth-child(3),
+.admin-table td:nth-child(3) {
+  width: 18%;
+} /* Local */
+
+.admin-table th:nth-child(4),
+.admin-table td:nth-child(4) {
+  width: 10%;
+  text-align: center;
+} /* Vagas */
+
+/* Status e Ações */
+.admin-table th:nth-child(5),
+.admin-table td:nth-child(5) {
+  width: 15%;
+} /* Status */
+
+.admin-table th:nth-child(6),
+.admin-table td:nth-child(6) {
+  width: 20%;
+} /* Ações */
+
+/* --- ESTILOS DOS COMPONENTES INTERNOS --- */
+
+/* Select de Status mais bonito */
+.status-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.status-select:hover {
+  border-color: var(--primary-color-start);
+}
+
+/* Grade de Botões de Ação (Grid 2x2) */
+.actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Duas colunas */
+  gap: 8px;
+}
+
+.btn-action-small {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+}

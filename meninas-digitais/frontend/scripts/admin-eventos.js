@@ -2,23 +2,48 @@ document.addEventListener("DOMContentLoaded", () => {
   const apiBaseUrl = "/api/eventos";
   const token = localStorage.getItem("token");
 
-  // DOM Elements - Eventos
+  // =========================================================================
+  // 1. ELEMENTOS DO DOM
+  // =========================================================================
+
+  // --- Modal de Criar/Editar Evento ---
   const modal = document.getElementById("eventModal");
   const modalOverlay = document.querySelector(".modal-overlay");
   const modalTitle = document.getElementById("modalTitle");
   const addEventBtn = document.getElementById("addEventBtn");
   const cancelBtn = document.getElementById("cancelBtn");
   const eventForm = document.getElementById("eventForm");
-  const eventsTableBody = document.getElementById("eventsTableBody");
   const eventIdField = document.getElementById("eventId");
 
-  // DOM Elements - Feedback
+  // --- Tabela Principal ---
+  const eventsTableBody = document.getElementById("eventsTableBody");
+
+  // --- Modal de Feedback ---
   const feedbackModal = document.getElementById("feedbackModal");
   const closeFeedbackBtn = document.getElementById("closeFeedbackBtn");
   const feedbackList = document.getElementById("feedbackList");
   const feedbackSummary = document.getElementById("feedbackSummary");
 
-  // --- CONTROLE DE MODAIS ---
+  // --- Modal de Participantes ---
+  const participantsModal = document.getElementById("participantsModal");
+  const closeParticipantsBtn = document.getElementById("closeParticipantsBtn");
+  const participantsList = document.getElementById("participantsList");
+  const participantsModalTitle = document.getElementById(
+    "participantsModalTitle"
+  );
+  const participantsCountBadge = document.getElementById(
+    "participantsCountBadge"
+  );
+  const copyEmailsBtn = document.getElementById("copyEmailsBtn");
+
+  // Variável para guardar e-mails temporariamente para cópia
+  let currentEmails = [];
+
+  // =========================================================================
+  // 2. CONTROLE DE ABERTURA/FECHAMENTO DE MODAIS
+  // =========================================================================
+
+  // Evento (Criar/Editar)
   const openModal = () => modal.classList.add("show");
   const closeModal = () => {
     modal.classList.remove("show");
@@ -26,10 +51,19 @@ document.addEventListener("DOMContentLoaded", () => {
     eventIdField.value = "";
   };
 
+  // Feedback
   const openFeedbackModal = () => feedbackModal.classList.add("show");
   const closeFeedbackModal = () => feedbackModal.classList.remove("show");
 
-  // --- RENDERIZAÇÃO DA LISTA DE EVENTOS ---
+  // Participantes
+  const openParticipantsModal = () => participantsModal.classList.add("show");
+  const closeParticipantsModal = () =>
+    participantsModal.classList.remove("show");
+
+  // =========================================================================
+  // 3. RENDERIZAÇÃO DA TABELA DE EVENTOS (LAYOUT OTIMIZADO)
+  // =========================================================================
+
   const fetchAndRenderEvents = async () => {
     try {
       const response = await fetch(apiBaseUrl, {
@@ -39,45 +73,79 @@ document.addEventListener("DOMContentLoaded", () => {
       const events = await response.json();
       renderEvents(events);
     } catch (error) {
-      eventsTableBody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">${error.message}</td></tr>`;
+      eventsTableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">${error.message}</td></tr>`;
     }
   };
 
   const renderEvents = (events) => {
     eventsTableBody.innerHTML = "";
+
     if (events.length === 0) {
-      eventsTableBody.innerHTML = `<tr><td colspan="7" class="text-center">Nenhum evento encontrado.</td></tr>`;
+      eventsTableBody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding: 30px;">Nenhum evento encontrado.</td></tr>`;
       return;
     }
 
     events.forEach((event) => {
       const row = document.createElement("tr");
 
-      // Estilo do Status
-      let statusStyle = "";
-      if (event.status === "Concluído")
-        statusStyle = "color: green; font-weight: bold;";
-      if (event.status === "Cancelado") statusStyle = "color: red;";
+      // Cores para o status (Visualização no Select)
+      let statusColor = "#555";
+      if (event.status === "Concluído") statusColor = "#2e7d32"; // Verde
+      if (event.status === "Cancelado") statusColor = "#c62828"; // Vermelho
+      if (event.status === "Agendado") statusColor = "#6f42c1"; // Roxo
 
-      // Botão de Feedback (SEM ESTRELA)
-      let feedbackBtn = "";
+      // Botão de Feedback (Aparece apenas se concluído)
+      // Ocupa 2 colunas no grid para ficar em destaque na parte inferior
+      let feedbackBtnHTML = "";
       if (event.status === "Concluído") {
-        feedbackBtn = `<button class="btn btn-primary btn-feedback" style="padding: 4px 8px; font-size: 0.8rem; background-color: #6f42c1;" data-id="${event._id}" data-title="${event.titulo}">Ver Avaliações</button>`;
+        feedbackBtnHTML = `
+          <button class="btn btn-primary btn-feedback btn-action-small" 
+                  style="background-color: #6f42c1; border:none; grid-column: span 2;" 
+                  data-id="${event._id}" 
+                  data-title="${event.titulo}">
+             ⭐ Ver Avaliações
+          </button>`;
       }
 
       row.innerHTML = `
-        <td>${event.titulo}</td>
-        <td>${new Date(event.data).toLocaleDateString("pt-BR", {
-          timeZone: "UTC",
-        })}</td>
-        <td>${event.local}</td>
-        <td>${event.participantes ? event.participantes.length : 0} / ${
-        event.numero_vagas
-      }</td>
+        <!-- Título -->
+        <td>
+            <span style="display: block; line-height: 1.2; font-weight: 600;">${
+              event.titulo
+            }</span>
+        </td>
+
+        <!-- Data e Hora (Agrupados) -->
+        <td>
+            ${new Date(event.data).toLocaleDateString("pt-BR", {
+              timeZone: "UTC",
+            })}
+            <br>
+            <span style="font-size: 0.8rem; color: #888;">${
+              event.horario
+            }</span>
+        </td>
+
+        <!-- Local -->
+        <td>
+            <span style="display: block; font-size: 0.9rem;">${
+              event.local
+            }</span>
+        </td>
+
+        <!-- Vagas -->
+        <td style="text-align: center;">
+            <strong>${
+              event.participantes ? event.participantes.length : 0
+            }</strong>
+            <span style="color: #888;">/ ${event.numero_vagas}</span>
+        </td>
+
+        <!-- Status -->
         <td>
             <select class="status-select" data-id="${
               event._id
-            }" style="border-radius:5px; padding:4px; ${statusStyle}">
+            }" style="color: ${statusColor}; border-color: ${statusColor};">
                 <option value="Agendado" ${
                   event.status === "Agendado" ? "selected" : ""
                 }>Agendado</option>
@@ -89,23 +157,140 @@ document.addEventListener("DOMContentLoaded", () => {
                 }>Cancelado</option>
             </select>
         </td>
-        <td class="actions-cell" style="display: flex; flex-direction: column; gap: 5px;">
-          <div style="display: flex; gap: 5px;">
-            <button class="btn btn-outline btn-edit" data-id="${
-              event._id
-            }">Editar</button>
-            <button class="btn btn-outline btn-delete" data-id="${
-              event._id
-            }">Excluir</button>
+
+        <!-- Ações (Grid Organizado) -->
+        <td>
+          <div class="actions-grid">
+            
+            <!-- Botão Lista de Inscritas (Destaque) -->
+            <button class="btn btn-outline btn-participants btn-action-small" 
+                    data-id="${event._id}" 
+                    data-title="${event.titulo}"
+                    title="Ver Lista de Presença"
+                    style="border-color: #0288d1; color: #0288d1; grid-column: span 2;">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+               Lista de Inscritas
+            </button>
+
+            <!-- Botão Editar -->
+            <button class="btn btn-outline btn-edit btn-action-small" 
+                    data-id="${event._id}" title="Editar">
+                ✏️ Editar
+            </button>
+
+            <!-- Botão Excluir -->
+            <button class="btn btn-outline btn-delete btn-action-small" 
+                    data-id="${event._id}" 
+                    style="color: #c62828; border-color: #c62828;" title="Excluir">
+                🗑️ Excluir
+            </button>
+
+            ${feedbackBtnHTML}
           </div>
-          ${feedbackBtn}
         </td>
       `;
       eventsTableBody.appendChild(row);
     });
   };
 
-  // --- LÓGICA DE FEEDBACK ---
+  // =========================================================================
+  // 4. LÓGICA DE LISTA DE PARTICIPANTES
+  // =========================================================================
+
+  const loadParticipants = async (eventId, eventTitle) => {
+    participantsModalTitle.textContent = `Inscritas: ${eventTitle}`;
+    participantsList.innerHTML =
+      '<p class="text-center">Carregando lista...</p>';
+    participantsCountBadge.textContent = "...";
+    currentEmails = []; // Reseta lista de emails
+
+    openParticipantsModal();
+
+    try {
+      const res = await fetch(`/api/eventos/${eventId}/participantes`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) throw new Error("Erro ao buscar participantes");
+
+      const participantes = await res.json();
+
+      participantsCountBadge.textContent = `${participantes.length} Inscritas`;
+
+      if (participantes.length === 0) {
+        participantsList.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: var(--muted-foreground);">
+                Nenhuma inscrição realizada ainda.
+            </div>`;
+        return;
+      }
+
+      // Preenche a lista visual
+      participantsList.innerHTML = participantes
+        .map((p) => {
+          // Guarda email para o botão de copiar
+          if (p.email) currentEmails.push(p.email);
+
+          // Pega inicial para Avatar
+          const inicial = p.nome ? p.nome.charAt(0).toUpperCase() : "?";
+
+          return `
+            <div style="
+                display: flex; 
+                align-items: center; 
+                gap: 15px; 
+                padding: 10px; 
+                background: var(--muted); 
+                border-radius: var(--radius-sm);
+                border: 1px solid var(--border);
+            ">
+                <div style="
+                    width: 35px; 
+                    height: 35px; 
+                    background: var(--primary-color-start); 
+                    color: white; 
+                    border-radius: 50%; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center; 
+                    font-weight: bold;
+                    flex-shrink: 0;
+                ">
+                    ${inicial}
+                </div>
+                <div style="overflow: hidden;">
+                    <strong style="display: block; color: var(--foreground);">${p.nome}</strong>
+                    <span style="font-size: 0.85rem; color: var(--muted-foreground);">${p.email}</span>
+                </div>
+            </div>
+          `;
+        })
+        .join("");
+    } catch (error) {
+      console.error(error);
+      participantsList.innerHTML =
+        '<p class="text-danger text-center">Erro ao carregar lista.</p>';
+    }
+  };
+
+  // Botão de Copiar E-mails
+  copyEmailsBtn.addEventListener("click", () => {
+    if (currentEmails.length === 0) {
+      alert("Não há e-mails para copiar.");
+      return;
+    }
+    const allEmails = currentEmails.join("; "); // Formato padrão separado por ponto e vírgula
+    navigator.clipboard.writeText(allEmails).then(() => {
+      const originalText = copyEmailsBtn.textContent;
+      copyEmailsBtn.textContent = "Copiado! ✅";
+      setTimeout(() => (copyEmailsBtn.textContent = originalText), 2000);
+    });
+  });
+
+  // =========================================================================
+  // 5. LÓGICA DE FEEDBACKS
+  // =========================================================================
+
   const loadFeedbacks = async (eventId, eventTitle) => {
     document.getElementById(
       "feedbackModalTitle"
@@ -152,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           `;
 
-      // Renderizar Lista
+      // Renderizar Lista de Comentários
       feedbackList.innerHTML = feedbacks
         .map(
           (f) => `
@@ -192,15 +377,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // --- EVENT DELEGATION ---
-  eventsTableBody.addEventListener("click", async (e) => {
-    const target = e.target;
-    const id = target.dataset.id;
+  // =========================================================================
+  // 6. EVENT DELEGATION (CLIQUES NA TABELA)
+  // =========================================================================
 
-    if (target.classList.contains("btn-feedback")) {
-      loadFeedbacks(id, target.dataset.title);
+  eventsTableBody.addEventListener("click", async (e) => {
+    // Procura o botão clicado (mesmo que clique no ícone dentro dele)
+    const target = e.target.closest("button");
+    if (!target) return;
+
+    const id = target.dataset.id;
+    const title = target.dataset.title;
+
+    // Ação: LISTA DE PARTICIPANTES
+    if (target.classList.contains("btn-participants")) {
+      loadParticipants(id, title);
     }
 
+    // Ação: VER FEEDBACKS
+    if (target.classList.contains("btn-feedback")) {
+      loadFeedbacks(id, title);
+    }
+
+    // Ação: EDITAR EVENTO
     if (target.classList.contains("btn-edit")) {
       try {
         const res = await fetch(`${apiBaseUrl}/${id}`, {
@@ -223,8 +422,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // Ação: EXCLUIR EVENTO
     if (target.classList.contains("btn-delete")) {
-      if (confirm("Excluir este evento?")) {
+      if (
+        confirm(
+          "Tem certeza que deseja excluir? Isso removerá todas as inscrições e feedbacks deste evento."
+        )
+      ) {
         await fetch(`${apiBaseUrl}/${id}`, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
@@ -234,12 +438,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Mudança de Status
+  // --- MUDANÇA DE STATUS (Select) ---
   eventsTableBody.addEventListener("change", async (e) => {
     if (e.target.classList.contains("status-select")) {
       const newStatus = e.target.value;
       const id = e.target.dataset.id;
-      e.target.disabled = true;
+      e.target.disabled = true; // Desabilita enquanto salva
+
       try {
         await fetch(`${apiBaseUrl}/${id}/status`, {
           method: "PATCH",
@@ -250,7 +455,7 @@ document.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify({ status: newStatus }),
         });
         e.target.disabled = false;
-        fetchAndRenderEvents();
+        fetchAndRenderEvents(); // Recarrega para atualizar cor
       } catch (err) {
         alert("Erro ao atualizar status");
         e.target.disabled = false;
@@ -258,7 +463,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Form Submit (Criar/Editar)
+  // =========================================================================
+  // 7. SUBMIT DO FORMULÁRIO E INICIALIZAÇÃO
+  // =========================================================================
+
   eventForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const id = eventIdField.value;
@@ -294,12 +502,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Listeners de Botões Fixos
   addEventBtn.addEventListener("click", () => {
     modalTitle.textContent = "Criar Evento";
     openModal();
   });
+
   cancelBtn.addEventListener("click", closeModal);
   modalOverlay.addEventListener("click", closeModal);
+
   closeFeedbackBtn.addEventListener("click", closeFeedbackModal);
+
+  // Novo botão para fechar lista de participantes
+  closeParticipantsBtn.addEventListener("click", closeParticipantsModal);
+
+  // Carregamento Inicial
   fetchAndRenderEvents();
 });
