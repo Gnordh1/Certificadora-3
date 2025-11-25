@@ -1,98 +1,173 @@
+# API RESTful - Meninas Digitais UTFPR-CP
 
-# **API de Gerenciamento de Eventos - Meninas Digitais**
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 
-
-## **Descrição do Projeto**
-
-Esta é uma API RESTful desenvolvida em Node.js com Express e MongoDB. O seu principal objetivo é gerenciar eventos, permitindo o cadastro, visualização, atualização e exclusão de eventos, bem como a inscrição e o cancelamento de inscrição de alunas. A API conta com um sistema de autenticação baseado em JWT (JSON Web Tokens) e controle de acesso por perfil, diferenciando as ações permitidas para "administradoras" e "alunas".
-
-O projeto foi estruturado de forma modular e escalável, separando as responsabilidades em rotas, controladores, modelos e middlewares, seguindo as melhores práticas de desenvolvimento de software.
-
-## **Funcionalidades**
-
-- **Autenticação e Autorização:**
-    - Registro de novas usuárias (alunas).
-    - Registro de novas administradoras.
-    - Login para todos os perfis de usuário com geração de token JWT.
-    - Proteção de rotas, garantindo que apenas usuários autenticados possam acessá-las.
-    - Controle de acesso baseado em perfil (`administradora` ou `aluna`) para rotas específicas.
-
-- **Gerenciamento de Eventos (Rotas de Administradora):**
-    - Criação de novos eventos com informações detalhadas (título, descrição, data, vagas, etc.).
-    - Atualização das informações de um evento existente.
-    - Exclusão de um evento.
-
-- **Interação com Eventos (Rotas Públicas e de Alunas):**
-    - Listagem de todos os eventos disponíveis (público).
-    - Visualização dos detalhes de um evento específico por ID (público).
-    - Inscrição de uma aluna logada em um evento (com validação de vagas e duplicidade).
-    - Cancelamento da inscrição de uma aluna em um evento.
-
-- **Gerenciamento de Usuário (Rotas de Aluna):**
-    - Visualização de todos os eventos em que a aluna logada está inscrita.
-
-## **Tecnologias Utilizadas**
-
-O projeto foi construído utilizando as seguintes tecnologias e bibliotecas:
-
-- **Backend:**
-    - **[Node.js](https://nodejs.org/)**: Ambiente de execução JavaScript do lado do servidor.
-    - **[Express.js](https://expressjs.com/)**: Framework para Node.js que facilita a criação de APIs REST.
-    - **[MongoDB](https://www.mongodb.com/)**: Banco de dados NoSQL orientado a documentos, utilizado para armazenar os dados da aplicação.
-    - **[Mongoose](https://mongoosejs.com/)**: Biblioteca para modelagem de objetos do MongoDB para Node.js.
-
-- **Autenticação e Segurança:**
-    - **[jsonwebtoken (JWT)](https://jwt.io/)**: Para gerar e verificar tokens de acesso, garantindo a segurança das rotas.
-    - **[bcryptjs](https://www.npmjs.com/package/bcryptjs)**: Para criptografar as senhas dos usuários antes de armazená-las no banco de dados.
-
-- **Gerenciamento de Ambiente:**
-    - **[dotenv](https://www.npmjs.com/package/dotenv)**: Para gerenciar variáveis de ambiente e manter a segurança de informações sensíveis (como chaves de API e strings de conexão).
-
-## **Pré-requisitos**
-
-Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
-- [Node.js](https://nodejs.org/en/download/) (versão 18 ou superior)
-- [NPM](https://www.npmjs.com/) ou [Yarn](https://yarnpkg.com/) (gerenciador de pacotes)
-- [MongoDB](https://www.mongodb.com/try/download/community) (ou uma conta no MongoDB Atlas)
-- Um editor de código de sua preferência, como o [VS Code](https://code.visualstudio.com/)
-
-## **Documentação da API**
-
-Todas as requisições e respostas são no formato JSON. O prefixo para todas as rotas da API é `/api`.
+Este documento descreve a **API RESTful** desenvolvida para a plataforma de gestão de eventos do projeto de extensão **Meninas Digitais**. A aplicação é responsável por gerenciar usuários, autenticação, eventos, inscrições e feedbacks, servindo como o núcleo lógico do sistema.
 
 ---
 
-### **Rotas de Autenticação (`/api/auth`)**
+## ⚙️ Arquitetura e Estrutura
 
-| Método | Rota | Descrição | Acesso | Corpo da Requisição (JSON) |
-| :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/register` | Registra uma nova usuária (aluna). | Público | `{ "nome": "...", "email": "...", "senha": "..." }` |
-| `POST` | `/register-admin` | Registra uma nova administradora. | Público | `{ "nome": "...", "email": "...", "senha": "..." }` |
-| `POST` | `/login` | Autentica um usuário e retorna um token. | Público | `{ "email": "...", "senha": "..." }` |
+O projeto segue o padrão **MVC (Model-View-Controller)** adaptado para APIs (sem a camada de View, pois servimos JSON). O código foi organizado para garantir escalabilidade e fácil manutenção.
 
----
-
-### **Rotas de Eventos (`/api/eventos`)**
-
-*Para as rotas que exigem autenticação, é necessário enviar o token JWT no cabeçalho `Authorization` no formato `Bearer seu_token_aqui`.*
-
-| Método | Rota | Descrição | Acesso | Corpo da Requisição (JSON) |
-| :--- | :--- | :--- | :--- | :--- |
-| `GET` | `/` | Lista todos os eventos. | Público | - |
-| `GET` | `/:id` | Obtém os detalhes de um evento por ID. | Público | - |
-| `POST` | `/` | Cria um novo evento. | Administradora | `{ "titulo": "...", "descricao": "...", "data": "...", "horario": "...", "local": "...", "numero_vagas": ... }` |
-| `PUT` | `/:id` | Atualiza um evento existente. | Administradora | `{ "campo_a_atualizar": "novo_valor" }` |
-| `DELETE` | `/:id` | Deleta um evento. | Administradora | - |
-| `POST` | `/:id/enroll` | Inscreve a usuária logada em um evento. | Aluna | - |
-| `POST` | `/:id/unenroll`| Cancela a inscrição da usuária logada. | Aluna | - |
-
----
-
-### **Rotas de Usuário (`/api/users`)**
-
-| Método | Rota | Descrição | Acesso | Corpo da Requisição (JSON) |
-| :--- | :--- | :--- | :--- | :--- |
-| `GET` | `/my-events` | Lista os eventos que a aluna logada está inscrita. | Aluna | - |
+```bash
+src/
+├── config/
+│   └── database.js     # Configuração e conexão com MongoDB (Mongoose)
+├── controllers/
+│   ├── authController.js     # Lógica de Login e Registro
+│   ├── eventController.js    # CRUD de Eventos e Gestão de Inscrições
+│   ├── feedbackController.js # Lógica de envio e listagem de avaliações
+│   ├── statsController.js    # Agregação de dados para o Dashboard
+│   └── userController.js     # Gestão de perfil e eventos da aluna
+├── middleware/
+│   └── authMiddleware.js     # Proteção de rotas (JWT) e verificação de cargos (Admin/Aluna)
+├── models/
+│   ├── Event.js        # Schema de Eventos
+│   ├── Feedback.js     # Schema de Avaliações
+│   └── User.js         # Schema de Usuários
+├── routes/
+│   ├── authRoutes.js
+│   ├── eventRoutes.js
+│   ├── feedbackRoutes.js
+│   ├── statsRoutes.js
+│   └── userRoutes.js
+└── app.js              # Ponto de entrada (Server, Middlewares e Setup Inicial)
+```
 
 ---
 
+## 🚀 Instalação e Configuração
+
+### 1. Pré-requisitos
+
+- **Node.js** (v18 ou superior)
+- **MongoDB** (Instalado localmente ou URI do MongoDB Atlas)
+- Gerenciador de pacotes (**npm** ou **yarn**)
+
+### 2. Instalação das Dependências
+
+Navegue até a pasta raiz do backend e execute:
+
+```bash
+npm install
+```
+
+### 3. Configuração de Variáveis de Ambiente (.env)
+
+Crie um arquivo `.env` na raiz do projeto. Este passo é **crucial** para que a aplicação funcione e para que o usuário administrador inicial seja criado.
+
+```env
+# Configuração do Servidor
+PORT=3000
+
+# Banco de Dados
+MONGO_URI=mongodb://localhost:27017/meninas-digitais
+
+# Segurança (JWT)
+JWT_SECRET=segredo_super_seguro_para_assinar_tokens
+
+# Configuração do Admin Inicial (Criado automaticamente no primeiro boot)
+INITIAL_ADMIN_NAME="Administradora Padrão"
+INITIAL_ADMIN_EMAIL="admin@exemplo.com"
+INITIAL_ADMIN_PASSWORD="admin123"
+```
+
+### 4. Executando a API
+
+Para iniciar o servidor em modo de produção:
+
+```bash
+node src/app.js
+```
+
+Ou, se estiver desenvolvendo (e tiver o `nodemon` instalado):
+
+```bash
+npm run dev
+```
+
+> **Nota:** Ao iniciar a aplicação pela primeira vez, o script verificará se existe algum administrador no banco. Se não houver, ele criará automaticamente o usuário definido nas variáveis `INITIAL_ADMIN_*`.
+
+---
+
+## Segurança e Autenticação
+
+A API utiliza **JSON Web Tokens (JWT)**.
+
+- **Fluxo:** O usuário faz login, recebe um `token` e deve enviá-lo no cabeçalho `Authorization` de todas as requisições protegidas.
+- **Formato do Header:** `Authorization: Bearer <seu_token_aqui>`
+- **Middlewares:**
+  - `protect`: Verifica se o token é válido.
+  - `isAdmin`: Garante que o usuário tem perfil de Administradora.
+  - `isStudent`: Garante que o usuário tem perfil de Aluna.
+
+---
+
+## Documentação dos Endpoints
+
+### Autenticação (`/api/auth`)
+
+| Método | Endpoint          | Acesso  | Descrição                                   |
+| :----- | :---------------- | :------ | :------------------------------------------ |
+| `POST` | `/register`       | Público | Cadastro de nova Aluna.                     |
+| `POST` | `/login`          | Público | Autenticação (retorna Token JWT).           |
+| `POST` | `/register-admin` | Público | Cadastro de Administradora (Rota auxiliar). |
+
+### Eventos (`/api/eventos`)
+
+| Método   | Endpoint             | Acesso    | Descrição                                                  |
+| :------- | :------------------- | :-------- | :--------------------------------------------------------- |
+| `GET`    | `/`                  | Público   | Lista todos os eventos.                                    |
+| `GET`    | `/:id`               | Público   | Detalhes de um evento específico.                          |
+| `POST`   | `/`                  | **Admin** | Criar novo evento.                                         |
+| `PUT`    | `/:id`               | **Admin** | Editar evento existente.                                   |
+| `DELETE` | `/:id`               | **Admin** | Excluir evento (remove inscrições e feedbacks associados). |
+| `PATCH`  | `/:id/status`        | **Admin** | Alterar status (_Agendado, Concluído, Cancelado_).         |
+| `GET`    | `/:id/participantes` | **Admin** | Lista de alunas inscritas no evento.                       |
+| `POST`   | `/:id/enroll`        | **Aluna** | Inscrever-se no evento (valida vagas e duplicidade).       |
+| `POST`   | `/:id/unenroll`      | **Aluna** | Cancelar inscrição.                                        |
+
+### Usuários (`/api/users`)
+
+| Método | Endpoint     | Acesso    | Descrição                                   |
+| :----- | :----------- | :-------- | :------------------------------------------ |
+| `GET`  | `/me`        | Logado    | Retorna dados do perfil do usuário logado.  |
+| `PUT`  | `/me`        | Logado    | Atualiza nome, e-mail ou senha do usuário.  |
+| `GET`  | `/my-events` | **Aluna** | Lista eventos em que a aluna está inscrita. |
+
+### Feedbacks (`/api/feedbacks`)
+
+| Método | Endpoint           | Acesso    | Descrição                                  |
+| :----- | :----------------- | :-------- | :----------------------------------------- |
+| `POST` | `/`                | **Aluna** | Enviar avaliação para um evento concluído. |
+| `GET`  | `/evento/:eventId` | **Admin** | Listar todas as avaliações de um evento.   |
+
+### Estatísticas (`/api/stats`)
+
+| Método | Endpoint     | Acesso    | Descrição                                                |
+| :----- | :----------- | :-------- | :------------------------------------------------------- |
+| `GET`  | `/dashboard` | **Admin** | Retorna contagem de Alunas, Eventos e Inscrições totais. |
+
+---
+
+## Testando com Insomnia / Postman
+
+Para testar as rotas protegidas:
+
+1.  Faça uma requisição `POST` para `/api/auth/login`.
+2.  Copie o `token` retornado no JSON.
+3.  Nas próximas requisições, vá na aba **Auth** (ou Headers), selecione **Bearer Token** e cole o código.
+
+---
+
+## Tecnologias e Bibliotecas
+
+- **Express:** Roteamento e middlewares.
+- **Mongoose:** Modelagem de dados e validações (ex: unicidade de e-mail, tipos de dados).
+- **Bcryptjs:** Hashing seguro de senhas.
+- **Cors:** Permite requisições do frontend (Cross-Origin Resource Sharing).
+- **Dotenv:** Gerenciamento de configuração sensível.
