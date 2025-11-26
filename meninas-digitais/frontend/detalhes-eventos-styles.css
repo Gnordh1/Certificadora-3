@@ -5,22 +5,20 @@
 .event-detail-container {
     padding-top: 40px;
     padding-bottom: 60px;
-    /* Adiciona padding lateral em telas muito grandes, se o .container não fizer */
     padding-left: 1rem; 
     padding-right: 1rem;
 }
 
-/* Força a largura máxima do container principal para o conteúdo dos detalhes */
-/* Use um valor menor que 1200px. Por exemplo, 900px ou 1000px. */
+
 .container {
-    max-width: 1000px !important; /* Mude este valor para o que desejar (ex: 900px, 1100px) */
+    max-width: 1000px !important; 
     margin-left: auto !important;
     margin-right: auto !important;
 }
 
-/* Você pode precisar reforçar o max-width para o grid se ele estiver ignorando o container */
+
 .event-detail-container .grid-2-cols {
-    max-width: 100%; /* Garante que o grid use toda a largura disponível do container */
+    max-width: 100%; 
 }
 
 /* ================================================= */
@@ -32,7 +30,7 @@
     align-items: center;
     gap: 8px;
     margin-bottom: 2rem;
-    padding: 8px 15px; /* Reintroduzindo padding horizontal para o formato de botão */
+    padding: 8px 15px; 
     font-size: 1rem;
     font-weight: 500;
     
@@ -49,12 +47,10 @@
 /* EFEITO HOVER: Fundo azul, texto branco */
 .btn-back:hover {
     background: var(--info-fg); /* Fundo azul (info-bg do seu styles.css) */
-    color: white; /* Texto branco (info-fg do seu styles.css) */
-    /* Você pode adicionar um transform: translateY(-2px); para um efeito de "levantar" */
+    color: white; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Uma pequena sombra no hover */
 }
 
-/* Garante que o SVG (ícone) herde a cor do texto do botão */
 .btn-back svg {
     stroke: currentColor; 
 }
@@ -73,7 +69,6 @@
 
 @media (min-width: 900px) {
     .main-content-grid {
-        /* Colunas mais compactas - esquerda maior, direita menor */
         grid-template-columns: 1.5fr 1.5fr;
         align-items: end;
         gap: 2rem;
@@ -335,7 +330,6 @@
     }
 }
 
-/* Remove estilos antigos que podem conflitar */
 .grid-2-cols {
     display: none;
 }

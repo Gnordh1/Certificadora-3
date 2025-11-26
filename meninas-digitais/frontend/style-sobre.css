@@ -1,6 +1,4 @@
-/* ================================================= */
-/* 1. VARIÁVEIS CSS (Simulando o Tema Tailwind/Shadcn) */
-/* ================================================= */
+
 :root {
     /* Base do Usuário */
     --background-h: 250;
@@ -16,7 +14,7 @@
 
     --primary-color-start: hsl(270 80% 65%);
     --primary-color-end: hsl(330 80% 60%);
-    --info-fg: hsl(215 90% 60%); /* Usado como 'Accent' para texto e fundo */
+    --info-fg: hsl(215 90% 60%); 
 
     --border: hsl(270 20% 90%);
 
@@ -24,8 +22,6 @@
     --gradient-secondary: linear-gradient( 135deg, hsl(330 80% 60%), hsl(340 85% 60%) );
     --gradient-hero: linear-gradient( 135deg, hsl(270 90% 70%) 0%, hsl(330 85% 65%) 50%, hsl(215 90% 65%) 100% );
 
-    /* Derivados para classes do TSX (HSL com Opacidade) */
-    /* Componentes HSL extraídos para cálculo de opacidade */
     --primary-h: 270; --primary-s: 80%; --primary-l: 65%;
     --secondary-h: 330; --secondary-s: 80%; --secondary-l: 60%;
     --accent-h: 215; --accent-s: 90%; --accent-l: 60%;
@@ -87,8 +83,7 @@ body {
 /* ================================================= */
 /* 3. NAVBAR E FOOTER (Estrutura) */
 /* ================================================= */
-/* O componente Navbar precisa ser implementado aqui ou no HTML */
-/* O footer (rodapé) já está estilizado no final */
+
 .footer {
     border-top: 1px solid var(--color-muted);
     padding-top: 2rem;
@@ -138,13 +133,12 @@ body {
     }
 }
 
-/* Gradiente de Texto: Simula bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent */
 .gradient-text {
     background-image: linear-gradient(to right, var(--color-primary), var(--color-secondary), var(--color-accent));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    display: inline; /* Necessário para que o clip-text funcione corretamente */
+    display: inline; 
 }
 
 /* ================================================= */
@@ -155,8 +149,6 @@ body {
     border: 1px solid #e2e8f0; 
     background-color: white;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); /* shadow-sm */
-    /* Garante que o texto seja centralizado em cards específicos (e.g., offer-section) */
-    /* Caso contrário, remover 'text-center' aqui e adicionar no HTML */
 }
 
 .card-content {
@@ -247,19 +239,15 @@ body {
     margin-right: auto;
 }
 .impact-card {
-    /* Simula bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 border-primary/10 */
     border: 1px solid var(--color-primary-10); 
     background-image: linear-gradient(to bottom right, var(--color-primary-05), rgba(236, 72, 153, 0.05), rgba(250, 204, 21, 0.05));
 }
 
 .main-content {
-    /* Aumente o valor de 3rem para 4rem ou 5rem */
-    padding-top: 5rem; /* Novo valor para criar mais espaço no topo */
+    padding-top: 5rem; 
     padding-bottom: 3rem; 
 }
 
-/* OU, adicione uma margem inferior na Navbar */
 .navbar {
-    /* ... outras propriedades ... */
-    margin-bottom: 2rem; /* Adiciona 2rem de espaço abaixo da Navbar */
+    margin-bottom: 2rem;
 }
