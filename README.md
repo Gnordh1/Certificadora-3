@@ -243,7 +243,7 @@ Você verá a página inicial (`index.html`). A partir dela, você pode navegar 
 
   
 
-Caso tenha ficado com alguma dúvida, disponibilizamos um vídeo mostrando o passo a passo para execução do sistema: 
+Caso tenha ficado com alguma dúvida, disponibilizamos um vídeo mostrando o passo a passo para execução do sistema: https://drive.google.com/file/d/1vCUBr8MzGPuPOvJADeOJQ82ZVL4hy3-p/view?usp=drive_link
 
 ---
 
