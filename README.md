@@ -1,3 +1,4 @@
+
 # Plataforma de Gestão de Eventos - Meninas Digitais UTFPR-CP
 
 ![Status](https://img.shields.io/badge/status-concluído-brightgreen)
@@ -14,24 +15,22 @@ Este repositório contém o código-fonte final da **Plataforma de Gestão de Ev
 
 ## Índice
 
-- [Sobre o Projeto](#-sobre-o-projeto)
+- [Sobre o Projeto](#sobre-o-projeto)
   - [O Problema](#o-problema)
   - [A Solução](#a-solução)
-- [Funcionalidades do Sistema](#-funcionalidades-do-sistema)
+- [Funcionalidades do Sistema](#funcionalidades-do-sistema)
   - [Perfil Administradora](#perfil-administradora)
   - [Perfil Aluna (Usuária Externa)](#perfil-aluna-usuária-externa)
-- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
   - [Frontend](#frontend)
   - [Backend](#backend)
   - [Ferramentas e Pré-requisitos](#ferramentas-e-pré-requisitos)
-- [Estrutura de Arquivos](#-estrutura-de-arquivos)
-- [Instalação e Execução](#-instalação-e-execução)
-  - [Passo 1: Clonagem e Dependências](#passo-1-clonagem-e-dependências)
-  - [Passo 2: Configuração do Ambiente (.env)](#passo-2-configuração-do-ambiente-env)
-  - [Passo 3: Inicialização](#passo-3-inicialização)
-- [Documentação da API (Endpoints)](#-documentação-da-api-endpoints)
-- [Guia de Testes e Uso](#-guia-de-testes-e-uso)
-- [Autores](#-autores)
+  - [Bibliotecas e Dependências (Backend)](#bibliotecas-e-dependências-backend)
+- [Estrutura de Arquivos](#estrutura-de-arquivos)
+- [Instalação e Execução](#instalação-e-execução)
+- [Documentação da API (Endpoints)](#documentação-da-api-endpoints)
+- [Guia de Testes e Uso](#guia-de-testes-e-uso)
+- [Autores](#autores)
 
 ---
 
@@ -90,6 +89,16 @@ A arquitetura do projeto baseia-se na stack **MERN** (MongoDB, Express, React\*,
 - **MongoDB & Mongoose:** Banco de dados NoSQL e modelagem de dados (Schemas).
 - **JWT (JSON Web Tokens):** Autenticação segura e _stateless_.
 - **Bcrypt.js:** Criptografia de senhas (Hashing).
+- **Dotenv:** Para o gerenciamento de variáveis de ambiente.
+
+### Banco de Dados
+- **MongoDB:** Banco de dados NoSQL orientado a documentos, escolhido por sua flexibilidade e integração natural com JavaScript.
+- **Mongoose:** Biblioteca para modelagem de dados (ODM) que facilita a interação com o MongoDB.
+
+### Ferramentas de Desenvolvimento
+- **Git & GitHub:** Para controle de versão e colaboração.
+- **Visual Studio Code:** Editor de código principal.
+- **Insomnia/Postman:** Para testar os endpoints da API durante o desenvolvimento.
 
 ### Ferramentas e Pré-requisitos
 
@@ -101,9 +110,21 @@ A arquitetura do projeto baseia-se na stack **MERN** (MongoDB, Express, React\*,
 | **VS Code** | Mais recente     | [code.visualstudio.com](https://code.visualstudio.com/)       | Editor de código recomendado para o desenvolvimento.       |
 | **Git**     | Mais recente     | [git-scm.com](https://git-scm.com/)                           | Sistema de controle de versão para clonar o repositório.   |
 
+
+### Bibliotecas e Dependências (Backend)
+
+| Biblioteca | Versão | Link | Descrição |
+| :--- | :--- | :--- | :--- |
+| **Express** | ^4.18.2 | [npmjs.com/package/express](https://www.npmjs.com/package/express) | Framework web para Node.js. |
+| **Mongoose** | ^7.4.0 | [npmjs.com/package/mongoose](https://www.npmjs.com/package/mongoose) | Modelagem de dados para MongoDB. |
+| **Bcryptjs** | ^2.4.3 | [npmjs.com/package/bcryptjs](https://www.npmjs.com/package/bcryptjs) | Criptografia de senhas. |
+| **JsonWebToken** | ^9.0.1 | [npmjs.com/package/jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) | Autenticação via Tokens JWT. |
+| **Cors** | ^2.8.5 | [npmjs.com/package/cors](https://www.npmjs.com/package/cors) | Habilita requisições cross-origin. |
+| **Dotenv** | ^16.3.1 | [npmjs.com/package/dotenv](https://www.npmjs.com/package/dotenv) | Variáveis de ambiente. |
+
 ---
 
-## 📂 Estrutura de Arquivos
+## Estrutura de Arquivos
 
 ```bash
 /
@@ -140,44 +161,89 @@ A arquitetura do projeto baseia-se na stack **MERN** (MongoDB, Express, React\*,
 
 ---
 
-## ⚡ Instalação e Execução
 
-### Passo 1: Clonagem e Dependências
+## Instalação e Execução
 
+Siga este roteiro passo a passo para configurar o ambiente e rodar o projeto.
+
+1. **Clone o repositório:**
 ```bash
 git clone https://github.com/Gnordh1/Certificadora-3.git
-cd Certificadora-3
+cd Certificadora-3/meninas-digitais
+```
+
+2. **Instale as dependências:**
+```bash
 npm install
 ```
+3. **Preparar o Banco de Dados**
+O sistema foi desenvolvido para ser agnóstico em relação à hospedagem do banco. Você pode optar por rodar o MongoDB localmente ou usar a nuvem.
+  
+Opção A: Rodando Localmente (Recomendado)
+Esta é a opção mais rápida se você já tem o MongoDB instalado.
+1. Certifique-se de ter o **MongoDB Community Server** instalado e rodando.
+2. (Opcional) Utilize o **MongoDB Compass** para visualizar os dados graficamente.
+3. No arquivo `.env`, a conexão será padrão:
+```env
+MONGO_URI=mongodb://localhost:27017/meninas-digitais
+```
 
-### Passo 2: Configuração do Ambiente (.env)
-
-Crie um arquivo chamado `.env` na raiz do projeto e configure as variáveis conforme abaixo:
+Opção B: Usando MongoDB Atlas (Nuvem)
+Se preferir não instalar o banco de dados na sua máquina:
+1. Crie uma conta gratuita no [MongoDB Atlas](https://www.mongodb.com/atlas).
+2. Crie um Cluster gratuito (M0).
+3. Em "Network Access", libere o acesso para todos os IPs (`0.0.0.0/0`) para evitar erros de conexão.
+4. Obtenha a *Connection String* (formato `mongodb+srv://...`).
+5. No arquivo `.env`, substitua a variável `MONGO_URI` pela string fornecida pelo Atlas:
 
 ```env
-# Configuração do Servidor e Banco
-PORT=3000
+MONGO_URI=mongodb+srv://<usuario>:<senha>@cluster0.exemplo.mongodb.net/meninas-digitais
+```
+4. **Configure as variáveis de ambiente:**
+
+  
+
+Crie um arquivo chamado `.env` na raiz da pasta `meninas-digitais/` e adicione as seguintes variáveis. Substitua os valores de exemplo pelos seus.
+
+```env
+# String de conexão do seu banco de dados MongoDB
 MONGO_URI=mongodb://localhost:27017/meninas-digitais
+PORT=3000
 
-# Segurança (JWT)
-JWT_SECRET=minha_chave_secreta_super_segura
-
-# Admin Inicial (Criado automaticamente no primeiro boot)
-INITIAL_ADMIN_NAME="Administradora Padrão"
+# Chave secreta para gerar os tokens JWT (pode ser qualquer string segura)
+JWT_SECRET=sua_chave_secreta_super_segura
+  
+# Credenciais para o administrador inicial que será criado no primeiro boot
 INITIAL_ADMIN_EMAIL="admin@exemplo.com"
-INITIAL_ADMIN_PASSWORD="admin123"
+INITIAL_ADMIN_PASSWORD="senhaforte123"
+INITIAL_ADMIN_NAME="Admin Padrao"
 ```
 
-### Passo 3: Inicialização
+
+
+5. **Inicie o servidor:**
 
 ```bash
-# Iniciar o servidor
+
 node src/app.js
+
 ```
 
-_O terminal deverá exibir: `Servidor rodando na porta 3000` e `MongoDB conectado com sucesso!`._
+  
 
-Acesse no navegador: **`http://localhost:3000`**
+O terminal deverá exibir: `Servidor rodando na porta 3000` e `MongoDB conectado com sucesso!`.
+
+  
+
+Acesse no navegador: **http://localhost:3000**
+
+  
+
+Você verá a página inicial (`index.html`). A partir dela, você pode navegar para a página de login/cadastro e, após logar como administrador, acessar os painéis de admin.
+
+  
+
+Caso tenha ficado com alguma dúvida, disponibilizamos um vídeo mostrando o passo a passo para execução do sistema: 
 
 ---
 
